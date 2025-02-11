@@ -29,7 +29,7 @@ export default function SocialLayout({ children, title, meta }: SocialLayoutProp
   return (
     <>
       <Head>
-        {title ? <title>{`Panache Social - ${title}`}</title> : <title>Panache Social</title>}
+        <title>Panache Social</title>
 
         {meta &&
           Object.entries(meta).map(([name, content]) => (
