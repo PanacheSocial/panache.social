@@ -1,7 +1,7 @@
 'use client'
 
 import * as React from 'react'
-import { Github, Home } from 'lucide-react'
+import { Home } from 'lucide-react'
 
 import { NavMain } from '#common/ui/components/nav_main'
 import { NavSecondary } from '#common/ui/components/nav_secondary'
@@ -24,6 +24,7 @@ import useTranslate from '../hooks/use_translate.js'
 import usePath from '../hooks/use_path.js'
 import GithubIcon from './icons/github_icon.js'
 import DiscordIcon from './icons/discord_icon.js'
+import { DropdownMenu, DropdownMenuContent, DropdownMenuTrigger } from './dropdown-menu.js'
 
 export function AppSidebar({ children, ...props }: React.ComponentProps<typeof Sidebar>) {
   const user = useUser()
@@ -45,13 +46,16 @@ export function AppSidebar({ children, ...props }: React.ComponentProps<typeof S
         <SidebarMenu>
           <SidebarMenuItem>
             <SidebarMenuButton size="lg" asChild>
-              <Link href="/">
-                <Logo />
-                <div className="grid flex-1 text-left text-sm leading-tight">
-                  <span className="truncate font-semibold">Panache</span>
-                  <span className="truncate text-xs">Social</span>
-                </div>
-              </Link>
+              <DropdownMenu>
+                <DropdownMenuTrigger className="flex space-x-2 flex-wrap">
+                  <Logo />
+                  <div className="grid flex-1 text-left text-sm leading-tight">
+                    <span className="truncate font-semibold">Panache</span>
+                    <span className="truncate text-xs">Social</span>
+                  </div>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent>t</DropdownMenuContent>
+              </DropdownMenu>
             </SidebarMenuButton>
           </SidebarMenuItem>
         </SidebarMenu>

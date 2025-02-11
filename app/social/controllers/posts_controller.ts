@@ -13,14 +13,19 @@ import drive from '@adonisjs/drive/services/main'
 
 export default class PostsController {
   async index({ auth, inertia, request }: HttpContext) {
-    const searchQuery = request.input('search')
-    const page = Number.parseInt(request.input('page', 1))
+    const postsQueryValidator = vine.compile(
+      vine.object({
+        searchQuery: vine.string().optional(),
+        page: vine.number().positive().withoutDecimals().min(1).optional(),
+      })
+    )
+    const data = await request.validateUsing(postsQueryValidator)
 
     const result = await Post.query()
-      .if(searchQuery, (query) => {
+      .if(data.searchQuery, (query) => {
         query.whereRaw(
           `unaccent(LOWER(title)) LIKE unaccent(?) OR unaccent(LOWER(text)) LIKE unaccent(?)`,
-          [`%${searchQuery}%`, `%${searchQuery}%`]
+          [`%${data.searchQuery?.toLowerCase()}%`, `%${data.searchQuery?.toLowerCase()}%`]
         )
       })
       .preload('profile', (query) => {
@@ -34,7 +39,7 @@ export default class PostsController {
           query.where('profile_id', auth.user!.currentProfileId!)
         })
       })
-      .paginate(page, 20)
+      .paginate(data.page || 1, 20)
 
     return inertia.render('social/posts', { posts: result.all() })
   }

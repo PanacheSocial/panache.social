@@ -9,7 +9,6 @@ import {
 } from '#common/ui/components/collapsible'
 import {
   SidebarGroup,
-  SidebarGroupLabel,
   SidebarMenu,
   SidebarMenuAction,
   SidebarMenuButton,

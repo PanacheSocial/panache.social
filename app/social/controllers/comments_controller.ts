@@ -8,12 +8,19 @@ import vine from '@vinejs/vine'
 
 export default class CommentsController {
   async index({ inertia, request }: HttpContext) {
-    const searchQuery = request.input('search')
-    const page = parseInt(request.input('page', 1))
+    const postsQueryValidator = vine.compile(
+      vine.object({
+        searchQuery: vine.string().optional(),
+        page: vine.number().positive().withoutDecimals().min(1).optional(),
+      })
+    )
+    const data = await request.validateUsing(postsQueryValidator)
 
     const result = await Comment.query()
-      .if(searchQuery, (query) => {
-        query.whereRaw(`unaccent(LOWER(text)) LIKE unaccent(?)`, [`%${searchQuery}%`])
+      .if(data.searchQuery, (query) => {
+        query.whereRaw(`unaccent(LOWER(text)) LIKE unaccent(?)`, [
+          `%${data.searchQuery?.toLowerCase()}%`,
+        ])
       })
       .preload('post', (query) => {
         query.preload('room')
@@ -21,7 +28,7 @@ export default class CommentsController {
       .preload('profile', (query) => {
         query.select('username', 'avatar')
       })
-      .paginate(page, 20)
+      .paginate(data.page || 1, 20)
 
     return inertia.render('social/comments', { comments: result.all() })
   }
