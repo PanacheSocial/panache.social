@@ -1,0 +1,17 @@
+name: ❓ Dev Goal (Other)
+description: (DEVS ONLY) Create this just for adding a goal or something.
+title: 'A Descriptive Title About The Goal'
+labels: ['goal']
+assignees: alexisbouchez
+body:
+    - type: textarea
+      attributes:
+          label: Additional information
+          description: Is there any other information about this goal?
+      validations:
+          required: false
+
+    - type: markdown
+      attributes:
+          value: |
+              ### Let's hope this feature or goal is implemented soon! 🤝
