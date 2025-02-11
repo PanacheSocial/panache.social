@@ -24,12 +24,12 @@ export default function Show({ room, posts }: { room: Room; posts: Post[] }) {
   return (
     <SocialLayout
       title={room.name}
-      meta={{
-        'description': room.description,
-        'og:title': room.name,
-        'og:description': room.description,
-        'og:url': `https://panache.so/rooms/${room.slug}`,
-      }}
+      // meta={{
+      //   'description': room.description,
+      //   'og:title': room.name,
+      //   'og:description': room.description,
+      //   'og:url': `https://panache.so/rooms/${room.slug}`,
+      // }}
     >
       <header>
         <div className="h-24 bg-[#e3e2d4] rounded-lg border border-sidebar"></div>

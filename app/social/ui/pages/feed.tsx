@@ -15,10 +15,10 @@ export default function Landing({ posts }: { room: Room; posts: Post[] }) {
   return (
     <SocialLayout
       title={t('social.feed')}
-      meta={{
-        'og:title': 'Panache Social',
-        'og:description': 'An open-source everything app',
-      }}
+      // meta={{
+      //   'og:title': 'Panache Social',
+      //   'og:description': 'An open-source everything app',
+      // }}
     >
       <div className="grid sm:grid-cols-3">
         <div className="col-span-2">
