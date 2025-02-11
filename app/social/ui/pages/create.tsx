@@ -138,11 +138,13 @@ function CreatePostForm() {
             isActive={type === 'link'}
             label={t('link')}
           />
-          <TabLink
-            href={`/create/meme${urlQuerySuffix}`}
-            isActive={type === 'meme'}
-            label={t('meme')}
-          />
+          <div className="hidden sm:block">
+            <TabLink
+              href={`/create/meme${urlQuerySuffix}`}
+              isActive={type === 'meme'}
+              label={t('meme')}
+            />
+          </div>
         </TabsList>
 
         {type === 'text' && (
