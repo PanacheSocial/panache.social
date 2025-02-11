@@ -11,5 +11,9 @@
   "gender": "Genre",
   "male": "M.",
   "female": "Mme.",
-  "settings": "Paramètres"
+  "settings": "Paramètres",
+  "soon": "Bientôt",
+  "social_description": "Rejoignez la conversation, partagez vos idées.",
+  "emails_description": "Envoyez et recevez vos courriels.",
+  "ai_description": "Améliore vos écrits, rédige des courriels, génère du code..."
 }

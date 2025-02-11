@@ -5,7 +5,7 @@ import path from 'node:path'
 
 const i18nConfig = defineConfig({
   defaultLocale: 'en',
-  supportedLocales: ['en', 'fr'],
+  supportedLocales: ['en'],
 
   formatter: formatters.icu(),
 

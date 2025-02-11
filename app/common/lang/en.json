@@ -11,5 +11,9 @@
   "gender": "Gender",
   "male": "Mr.",
   "female": "Ms.",
-  "settings": "Settings"
+  "settings": "Settings",
+  "soon": "Soon",
+  "social_description": "Join the conversation, share your ideas.",
+  "emails_description": "Send and receive your emails.",
+  "ai_description": "Improve your writing, draft your emails, generate code, , ..."
 }

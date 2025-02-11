@@ -24,9 +24,9 @@ export default function Show({ room, post }: { room: Room; post: Post }) {
     <SocialLayout
       title={post.title}
       meta={{
-        'description': post.text || post.title,
+        'description': post.title,
         'og:title': post.title,
-        'og:description': post.text || post.title,
+        'og:description': post.title,
         ...(post.ogImage ? { 'og:image': post.ogImage } : {}),
         'og:url': `https://panache.so/rooms/${room.slug}/posts/${post.id}`,
       }}
@@ -88,13 +88,9 @@ export default function Show({ room, post }: { room: Room; post: Post }) {
             ) : null}
 
             {post.text ? (
-              <p className="prose pt-2 text-sm">
-                {post.text.split('\n').map((part, index) => (
-                  <React.Fragment key={index}>
-                    {part}
-                    <br />
-                  </React.Fragment>
-                ))}
+              <p className="prose pt-2 text-sm whitespace-pre-line">
+                {post.text}
+                <br />
               </p>
             ) : null}
 
