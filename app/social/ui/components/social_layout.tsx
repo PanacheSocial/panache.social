@@ -16,6 +16,7 @@ import Room from '#social/models/room'
 import { NavMain } from '#common/ui/components/nav_main'
 import usePath from '#common/ui/hooks/use_path'
 import string from '@adonisjs/core/helpers/string'
+import he from 'he'
 
 export type SocialLayoutProps = React.PropsWithChildren<{
   title?: string
@@ -30,7 +31,7 @@ export default function SocialLayout({ children, meta, title }: SocialLayoutProp
     joinedRooms?: Room[]
   }>()
   const path = usePath()
-  title = string.escapeHTML(`Panache Social${title ? `- ${title}` : ''}`)
+  title = he.escape(`Panache Social${title ? `- ${title}` : ''}`)
 
   return (
     <>
@@ -44,8 +45,8 @@ export default function SocialLayout({ children, meta, title }: SocialLayoutProp
             return (
               <meta
                 key={name}
-                name={string.escapeHTML(name.slice(0, 100))}
-                content={string.escapeHTML(content.slice(0, 100))}
+                name={he.escape(name.slice(0, 100))}
+                content={he.escape(content.slice(0, 100))}
               />
             )
           })}
