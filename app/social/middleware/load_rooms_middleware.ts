@@ -26,7 +26,6 @@ export default class LoadRoomsMiddleware {
         builder.where('profile_id', currentProfile.id)
       })
       .orderBy('created_at', 'desc')
-      .limit(10)
 
     const popularRooms = await Room.query()
       .orderBy('members_count')

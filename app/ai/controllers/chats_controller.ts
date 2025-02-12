@@ -7,6 +7,8 @@ import env from '#start/env'
 import { Readable } from 'node:stream'
 import Message from '#ai/models/message'
 import MessageGenerated from '#ai/events/message_generated'
+import { inject } from '@adonisjs/core'
+import ToolsService from '#ai/services/tools_service'
 
 export default class ChatsController {
   @Middleware(middleware.auth())
@@ -19,9 +21,10 @@ export default class ChatsController {
 
   @Middleware(middleware.auth())
   @Post('/ai/chats', 'ai.chats.store')
-  async store({ auth, request, response }: HttpContext) {
+  async store({ auth, session, request, response }: HttpContext) {
     const chat = await auth.user!.related('chats').create({})
-    await chat.related('messages').create({ content: request.input('prompt'), role: 'user' })
+    session.flash('prompt', request.input('prompt'))
+    console.log('session', session.flashMessages.all())
     return response.redirect().toRoute('ai.chats.show', [chat.id])
   }
 
@@ -46,7 +49,8 @@ export default class ChatsController {
 
   @Middleware(middleware.auth())
   @Post('/ai/chats/:chatId/chat', 'ai.chats.chat')
-  async chat({ auth, params, response }: HttpContext) {
+  @inject()
+  async chat({ auth, params, request, response }: HttpContext, toolsService: ToolsService) {
     const chat = await auth
       .user!.related('chats')
       .query()
@@ -63,13 +67,24 @@ export default class ChatsController {
     const model = anthropic('claude-3-5-sonnet-latest')
     const stream = streamText({
       model,
-      messages: chat.messages
-        .filter((msg) => msg.role !== 'tool')
-        .map((msg) => ({
-          role: msg.role as 'user' | 'system' | 'assistant',
-          content: msg.content,
-        })),
+      tools: await toolsService.getTools(),
+      messages: [
+        ...chat.messages
+          .filter((msg) => msg.content !== '' && msg.role !== 'tool')
+          .map((msg) => ({
+            role: msg.role as 'user' | 'system' | 'assistant',
+            content: msg.content,
+          })),
+        ...request.input('messages'),
+      ],
+      onError: async (event) => {
+        console.log('error', event)
+      },
+      onChunk: async (event) => {
+        console.log('chunk', event)
+      },
       onFinish: async (event) => {
+        console.log('finish', event)
         const message = new Message()
         message.role = 'assistant'
         message.content = event.text
