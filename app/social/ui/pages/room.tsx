@@ -14,12 +14,19 @@ import { useFormatDistanceToNow } from '#common/ui/hooks/use_format_distance_to_
 import { cn } from '#common/ui/lib/utils'
 import useUser from '#common/ui/hooks/use_user'
 import { ProfileAvatar } from '../components/profiles/profile_avatar'
-import { RoomLogo } from '../components/rooms/room_logo'
+import { RoomLogoUploader } from '../components/rooms/room_logo_uploader'
+import { RoomHeader } from '../components/rooms/room_header'
 
-export default function Show({ room, posts }: { room: Room; posts: Post[] }) {
+export default function Show({
+  room,
+  posts,
+  canModerate,
+}: {
+  room: Room
+  posts: Post[]
+  canModerate: boolean
+}) {
   const formatDistanceToNow = useFormatDistanceToNow()
-  const t = useTranslate()
-  const user = useUser()
   return (
     <SocialLayout
       title={room.name}
@@ -29,34 +36,8 @@ export default function Show({ room, posts }: { room: Room; posts: Post[] }) {
         'og:url': `https://panache.so/rooms/${room.slug}`,
       }}
     >
-      <header>
-        <div className="h-24 bg-[#e3e2d4] rounded-lg border border-sidebar"></div>
-        <div className="flex flex-wrap gap-x-2 items-center justify-between pt-3 px-4">
-          <div className="flex flex-col lg:flex-row items-start gap-y-4 lg:gap-y-0 lg:gap-x-4 lg:w-full">
-            <RoomLogo room={room} className="h-24 w-24 -mt-10 rounded-3xl border-4 border-white" />
+      <RoomHeader room={room} canModerate={canModerate} />
 
-            <div>
-              <p className="font-mono font-medium uppercase text-sm">{t('social.room')}</p>
-              <h2 className="text-2xl font-semibold">{room.name}</h2>
-            </div>
-
-            <div className="flex flex-wrap gap-2 sm:gap-y-0 pt-4 sm:pt-0 ml-auto">
-              <Link
-                className={cn(
-                  buttonVariants({ variant: 'secondary' }),
-                  '!w-full sm:!w-auto',
-                  !user && '!cursor-not-allowed opacity-50'
-                )}
-                href={user ? `/create?room=${room.slug}` : ''}
-              >
-                <PlusCircleIcon className="h-4 w-4" />
-                <span>{t('social.create_a_post')}</span>
-              </Link>
-              <JoinRoomButton />
-            </div>
-          </div>
-        </div>
-      </header>
       <div className="flex flex-col-reverse lg:grid lg:grid-cols-4 lg:gap-x-8 xl:gap-x-12 gap-4 pt-6 px-4 w-full">
         <div className="col-span-3">
           <SortBySelect />

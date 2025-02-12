@@ -11,7 +11,7 @@ export type RoomLogoProps = {
 export function RoomLogo({ room, className }: { room: Room; className?: string }) {
   return (
     <Avatar className={cn('h-9 w-9', className)}>
-      <AvatarImage src={`https://avatar.vercel.sh/${room.slug}`} alt={room.slug} />
+      <AvatarImage src={room.logo || `https://avatar.vercel.sh/${room.slug}`} alt={room.slug} />
     </Avatar>
   )
 }

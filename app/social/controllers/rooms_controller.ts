@@ -6,6 +6,9 @@ import { DateTime } from 'luxon'
 import string from '@adonisjs/core/helpers/string'
 import { inject } from '@adonisjs/core'
 import WebhooksService from '#common/services/webhooks_service'
+import { Middleware, Patch } from '@softwarecitadel/girouette'
+import { middleware } from '#start/kernel'
+import drive from '@adonisjs/drive/services/main'
 
 export default class RoomsController {
   async index({ inertia, request }: HttpContext) {
@@ -144,8 +147,9 @@ export default class RoomsController {
       .where('profile_id', auth.user!.currentProfileId!)
       .first()
     const isMember = roomMemberFound !== null
+    const canModerate = auth.user!.role === 'admin' || roomMemberFound?.role === 'moderator'
 
-    return inertia.render('social/room', { room, posts: room.posts, isMember })
+    return inertia.render('social/room', { room, posts: room.posts, isMember, canModerate })
   }
 
   async join({ auth, params, response }: HttpContext) {
@@ -179,5 +183,49 @@ export default class RoomsController {
     await roomMember.delete()
 
     return response.redirect().withQs().back()
+  }
+
+  @Middleware(middleware.auth())
+  @Patch('/rooms/:roomSlug/logo')
+  async updateLogo({ request, response, params, bouncer }: HttpContext) {
+    /**
+     * Find the room by the slug.
+     */
+    const room = await Room.findByOrFail('slug', params.roomSlug)
+
+    /**
+     * Authorize the user to update the room logo.
+     */
+    await bouncer.with('RoomPolicy').authorize('updateLogo', room)
+
+    /**
+     * Validate the request.
+     */
+    const updateLogoValidator = vine.compile(
+      vine.object({
+        logo: vine.file({
+          size: '100kb',
+          extnames: ['png', 'jpg', 'jpeg', 'webp', 'gif'],
+        }),
+      })
+    )
+    const { logo } = await request.validateUsing(updateLogoValidator)
+
+    /**
+     * Upload the logo to the S3 bucket.
+     */
+    const key = `/uploads/${room.id}`
+    await logo.moveToDisk(key, 's3', {
+      name: key,
+      visibility: 'public',
+    })
+
+    /**
+     * Update the room record with the new logo path.
+     */
+    room.logo = await drive.use().getUrl(key)
+    await room.save()
+
+    return response.redirect().back()
   }
 }

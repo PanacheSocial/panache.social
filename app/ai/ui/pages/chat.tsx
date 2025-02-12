@@ -37,7 +37,7 @@ export default function ChatPage({ chat }: { chat: Chat }) {
         </div>
 
         <form className="w-full max-w-xl" onSubmit={handleSubmit}>
-          <MessageInput value={input} onValueChange={handleInputChange} />
+          <MessageInput value={input} onValueChange={handleInputChange} isLoading={isLoading} />
         </form>
       </div>
     </AiLayout>

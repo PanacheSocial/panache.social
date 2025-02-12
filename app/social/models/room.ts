@@ -26,6 +26,9 @@ export default class Room extends BaseModel {
   @column()
   declare membersCount: number
 
+  @column()
+  declare logo: string | null
+
   /**
    * Relationships.
    */
