@@ -15,13 +15,14 @@ import usePageProps from '#common/ui/hooks/use_page_props'
 import Room from '#social/models/room'
 import { NavMain } from '#common/ui/components/nav_main'
 import usePath from '#common/ui/hooks/use_path'
+import string from '@adonisjs/core/helpers/string'
 
 export type SocialLayoutProps = React.PropsWithChildren<{
   title?: string
-  meta?: Record<string, string>
+  meta?: Record<string, string | undefined>
 }>
 
-export default function SocialLayout({ children, meta }: SocialLayoutProps) {
+export default function SocialLayout({ children, meta, title }: SocialLayoutProps) {
   const t = useTranslate()
   const user = useUser()
   const { joinedRooms, popularRooms } = usePageProps<{
@@ -29,16 +30,27 @@ export default function SocialLayout({ children, meta }: SocialLayoutProps) {
     joinedRooms?: Room[]
   }>()
   const path = usePath()
+  title = string.escapeHTML(`Panache Social${title ? `- ${title}` : ''}`)
+
   return (
     <>
       <Head>
-        <title>Panache Social</title>
-
+        <title>{title}</title>
+        {title ? <meta name="title" content={title} /> : null}
         {meta &&
-          Object.entries(meta).map(([name, content]) => (
-            <meta key={name} name={name} content={content} />
-          ))}
+          Object.entries(meta).map((metaItem) => {
+            if (!metaItem || !metaItem[1]) return
+            const [name, content] = metaItem
+            return (
+              <meta
+                key={name}
+                name={string.escapeHTML(name.slice(0, 100))}
+                content={string.escapeHTML(content.slice(0, 100))}
+              />
+            )
+          })}
       </Head>
+
       <SidebarProvider>
         <AppSidebar moduleName="Social">
           <NavMain
@@ -62,7 +74,7 @@ export default function SocialLayout({ children, meta }: SocialLayoutProps) {
             <div className="flex flex-wrap w-full justify-between items-center gap-2 px-4">
               <SidebarTrigger className="-ml-1" />
               <SearchInput />
-              <div className="flex items-center w-full sm:w-auto justify-between  gap-4">
+              <div className="flex items-center w-full sm:w-auto justify-between gap-4">
                 <Link
                   className={cn(
                     buttonVariants({ variant: 'secondary' }),

@@ -7,7 +7,6 @@ import env from '#start/env'
 import { Readable } from 'node:stream'
 import Message from '#ai/models/message'
 import MessageGenerated from '#ai/events/message_generated'
-import { cuid } from '@adonisjs/core/helpers'
 
 export default class ChatsController {
   @Middleware(middleware.auth())

@@ -51,17 +51,22 @@ TabsContent.displayName = TabsPrimitive.Content.displayName
 export { Tabs, TabsList, TabsTrigger, TabsContent }
 
 export function TabLink({
+  className,
   href,
   label,
   isActive,
 }: {
+  className?: string
   href: string
   label: string
   isActive: boolean
 }) {
   return (
     <Link
-      className="inline-flex items-center cursor-pointer justify-center whitespace-nowrap rounded-md px-3 py-1 text-sm font-medium ring-offset-background transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 data-[state=active]:bg-background data-[state=active]:text-foreground data-[state=active]:shadow"
+      className={cn(
+        'w-full inline-flex items-center cursor-pointer justify-center whitespace-nowrap rounded-md px-3 py-1 text-sm font-medium ring-offset-background transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 data-[state=active]:bg-background data-[state=active]:text-foreground data-[state=active]:shadow',
+        className
+      )}
       href={href}
       data-state={isActive ? 'active' : 'inactive'}
     >

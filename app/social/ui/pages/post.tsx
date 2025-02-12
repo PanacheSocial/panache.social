@@ -28,13 +28,12 @@ export default function Show({ room, post }: { room: Room; post: Post }) {
   return (
     <SocialLayout
       title={post.title}
-      // meta={{
-      //   'description': post.text || post.title,
-      //   'og:title': post.title,
-      //   'og:description': post.text || post.title,
-      //   ...(post.ogImage ? { 'og:image': post.ogImage } : {}),
-      //   'og:url': `https://panache.so/rooms/${room.slug}/posts/${post.id}`,
-      // }}
+      meta={{
+        'description': post.text || post.title,
+        'og:description': post.text || undefined,
+        'og:image': post.image || post.ogImage || undefined,
+        'og:url': `https://panache.so/rooms/${room.slug}/posts/${post.id}`,
+      }}
     >
       <div className="flex flex-col-reverse sm:grid sm:grid-cols-4 gap-y-4 sm:gap-y-0 sm:gap-x-8">
         <div className="col-span-3">

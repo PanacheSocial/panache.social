@@ -32,7 +32,7 @@ export function ProfileHeader({ profile }: { profile: Profile }) {
     }
   }
 
-  async function handleAvatarUpdate(croppedImageUrl) {
+  async function handleAvatarUpdate(croppedImageUrl: string) {
     /**
      * Fetch the cropped image and convert it to a File object
      */
