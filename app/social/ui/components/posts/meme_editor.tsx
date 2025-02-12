@@ -331,7 +331,7 @@ export function MemeEditor() {
           size="icon"
           className="tooltip shrink-0"
         >
-          <span>Delete</span>
+          <span>{t('common.delete')}</span>
           <Icons.trash className="size-4 text-red-600" />
         </Button>
       )}

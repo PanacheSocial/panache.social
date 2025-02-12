@@ -1,38 +1,34 @@
-import { AppSidebar } from '#common/ui/components/app_sidebar'
-import ModeSwitch from '#common/ui/components/mode_switch'
-import { MessageInput } from '#common/ui/components/message_input'
-import { SidebarInset, SidebarProvider, SidebarTrigger } from '#common/ui/components/sidebar'
-import { useChat } from 'ai/react'
-import React from 'react'
-import { getTimeOfDay } from '#ai/ui/lib/time'
+import React, { FormEvent } from 'react'
+import { AiLayout } from '#ai/ui/components/ai_layout'
+import { useGetTimeOfDay } from '#ai/ui/hooks/get_time_of_day'
+import { useForm } from '@inertiajs/react'
+import { MessageInput } from '../components/message_input'
 
 export default function Landing() {
-  const { input, isLoading, handleInputChange, handleSubmit } = useChat()
-  return (
-    <SidebarProvider>
-      <AppSidebar />
-      <SidebarInset>
-        <header className="flex h-16 shrink-0 items-center gap-2">
-          <div className="flex w-full justify-between items-center gap-2 px-4">
-            <SidebarTrigger className="-ml-1" />
+  const getTimeOfDay = useGetTimeOfDay()
+  const form = useForm({
+    prompt: '',
+  })
 
-            <div>
-              <ModeSwitch />
-            </div>
-          </div>
-        </header>
-        <div className="flex flex-col gap-4 p-4 lg:pt-64 h-full max-w-6xl w-full mx-auto">
-          <h1 className="text-center text-5xl sm:text-7xl font-serif">Good {getTimeOfDay()}!</h1>
-          <form className="w-full" onSubmit={handleSubmit}>
-            <MessageInput
-              className="w-full"
-              value={input}
-              onChange={handleInputChange}
-              isGenerating={isLoading}
-            />
-          </form>
-        </div>
-      </SidebarInset>
-    </SidebarProvider>
+  const handleSubmit = (event: FormEvent) => {
+    event.preventDefault()
+
+    form.post('/ai/chats')
+  }
+
+  return (
+    <AiLayout>
+      <div className="min-h-full flex flex-col space-y-4 items-center justify-center">
+        <h1 className="text-center text-3xl sm:text-5xl lg:text-7xl font-serif">
+          {getTimeOfDay()}
+        </h1>
+        <form className="w-full max-w-2xl" onSubmit={handleSubmit}>
+          <MessageInput
+            value={form.data.prompt}
+            onValueChange={(e) => form.setData('prompt', e.target.value)}
+          />
+        </form>
+      </div>
+    </AiLayout>
   )
 }

@@ -1,9 +1,8 @@
 'use client'
 
 import * as React from 'react'
-import { BotIcon, Home, MailsIcon, MessagesSquare, Share2Icon } from 'lucide-react'
+import { BotIcon, MailsIcon, MessagesSquare, Share2Icon } from 'lucide-react'
 
-import { NavMain } from '#common/ui/components/nav_main'
 import { NavSecondary } from '#common/ui/components/nav_secondary'
 import { NavUser } from '#common/ui/components/nav_user'
 import {
@@ -27,29 +26,21 @@ import DiscordIcon from './icons/discord_icon.js'
 import { DropdownMenu, DropdownMenuContent, DropdownMenuTrigger } from './dropdown-menu.js'
 import { Badge } from './badge.js'
 
-export function AppSidebar({ children, ...props }: React.ComponentProps<typeof Sidebar>) {
+export function AppSidebar({
+  children,
+  moduleName,
+  ...props
+}: React.ComponentProps<typeof Sidebar> & { moduleName: string }) {
   const user = useUser()
   const t = useTranslate()
-  const path = usePath()
-  const data = {
-    navMain: [
-      {
-        title: t('common.home'),
-        url: '/',
-        icon: Home,
-        isActive: path === '/',
-      },
-    ],
-  }
   return (
     <Sidebar variant="inset" {...props}>
       <SidebarHeader>
         <SidebarMenu>
-          <SwitchProductMenu moduleName="Social" />
+          <SwitchProductMenu moduleName={moduleName} />
         </SidebarMenu>
       </SidebarHeader>
       <SidebarContent>
-        <NavMain items={data.navMain} />
         {children}
         <NavSecondary
           className="mt-auto"
@@ -107,7 +98,7 @@ function SwitchProductMenu({ moduleName }: { moduleName: string }) {
       href: '/',
       description: t('common.social_description'),
       icon: <MessagesSquare className="h-4 w-4 mr-2 text-primary" />,
-      isCurrent: !path.startsWith('/ai') || !path.startsWith('/emails'),
+      isCurrent: !path.startsWith('/ai') && !path.startsWith('/emails'),
     },
     {
       title: 'Panache AI',

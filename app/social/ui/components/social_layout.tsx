@@ -5,7 +5,7 @@ import { NavRooms } from './rooms/nav_rooms'
 import { Head, Link } from '@inertiajs/react'
 import { buttonVariants } from '#common/ui/components/button'
 import useTranslate from '#common/ui/hooks/use_translate'
-import { PlusCircleIcon } from 'lucide-react'
+import { Home, PlusCircleIcon } from 'lucide-react'
 import { SearchInput } from './search_input'
 import { Toaster } from '#common/ui/components/toaster'
 import { SocialDropdown } from './social_dropdown'
@@ -13,19 +13,22 @@ import useUser from '#common/ui/hooks/use_user'
 import { cn } from '#common/ui/lib/utils'
 import usePageProps from '#common/ui/hooks/use_page_props'
 import Room from '#social/models/room'
+import { NavMain } from '#common/ui/components/nav_main'
+import usePath from '#common/ui/hooks/use_path'
 
 export type SocialLayoutProps = React.PropsWithChildren<{
   title?: string
   meta?: Record<string, string>
 }>
 
-export default function SocialLayout({ children, title, meta }: SocialLayoutProps) {
-  const t = useTranslate('social')
+export default function SocialLayout({ children, meta }: SocialLayoutProps) {
+  const t = useTranslate()
   const user = useUser()
   const { joinedRooms, popularRooms } = usePageProps<{
     popularRooms: Room[]
     joinedRooms?: Room[]
   }>()
+  const path = usePath()
   return (
     <>
       <Head>
@@ -37,11 +40,22 @@ export default function SocialLayout({ children, title, meta }: SocialLayoutProp
           ))}
       </Head>
       <SidebarProvider>
-        <AppSidebar>
+        <AppSidebar moduleName="Social">
+          <NavMain
+            items={[
+              {
+                title: t('common.home'),
+                url: '/',
+                icon: Home,
+                isActive: path === '/',
+              },
+            ]}
+          />
+
           {joinedRooms && joinedRooms.length > 0 && (
-            <NavRooms title={t('rooms')} rooms={joinedRooms} />
+            <NavRooms title={t('social.rooms')} rooms={joinedRooms} />
           )}
-          <NavRooms title={t('popular')} rooms={popularRooms} />
+          <NavRooms title={t('social.popular')} rooms={popularRooms} />
         </AppSidebar>
         <SidebarInset>
           <header className="flex py-2 sm:py-0 sm:h-16 shrink-0 items-center gap-2 border-b">
@@ -57,7 +71,7 @@ export default function SocialLayout({ children, title, meta }: SocialLayoutProp
                   href={user ? '/create' : ''}
                 >
                   <PlusCircleIcon className="h-4 w-4" />
-                  <span>{t('create_a_post')}</span>
+                  <span>{t('social.create_a_post')}</span>
                 </Link>
                 <SocialDropdown />
               </div>

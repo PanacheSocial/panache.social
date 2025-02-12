@@ -7,6 +7,7 @@ import { PostActions } from './post_actions'
 import { ImagePreview } from '#common/ui/components/image_preview'
 import { LinkPreview } from './link_preview'
 import { cn } from '#common/ui/lib/utils'
+import { YouTubeEmbed } from './youtube_embed'
 
 interface PostCardProps {
   header?: React.ReactElement
@@ -16,6 +17,9 @@ interface PostCardProps {
 
 export function PostCard({ header, post }: PostCardProps) {
   const [cancelHover, setCancelHover] = React.useState(false)
+
+  // Check if the link is from YouTube
+  const isYouTubeLink = post.link?.match(/^(https?:\/\/)?(www\.)?(youtube\.com|youtu\.be)\/.+$/)
 
   return (
     <Link href={`/rooms/${post.room.slug}/posts/${post.id}`}>
@@ -27,7 +31,13 @@ export function PostCard({ header, post }: PostCardProps) {
           <div className="pt-2 flex flex-col space-y-1">
             <h2 className="font-medium">{post.title}</h2>
 
-            {post.link && !post.ogImage && (
+            {/* YouTube Embed */}
+            {post.link && isYouTubeLink && (
+              <YouTubeEmbed url={post.link} setHovered={setCancelHover} />
+            )}
+
+            {/* Regular Link */}
+            {post.link && !isYouTubeLink && !post.ogImage && (
               <a
                 href={post.link}
                 className="transition-colors text-sm text-emerald-800 hover:text-emerald-600 truncate break-all"
@@ -39,7 +49,8 @@ export function PostCard({ header, post }: PostCardProps) {
               </a>
             )}
 
-            {post.link && post.ogImage && (
+            {/* Link Preview */}
+            {post.link && !isYouTubeLink && post.ogImage && (
               <LinkPreview
                 image={{ src: post.ogImage, alt: post.title + "'s Image" }}
                 title={post.title}
@@ -60,7 +71,7 @@ export function PostCard({ header, post }: PostCardProps) {
             {post.image && (
               <div className="flex">
                 <ImagePreview
-                  image={{ src: post.image, alt: post.title + 's Image' }}
+                  image={{ src: post.image, alt: post.title + "'s Image" }}
                   setHovered={setCancelHover}
                 />
               </div>

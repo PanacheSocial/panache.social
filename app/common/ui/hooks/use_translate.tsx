@@ -10,10 +10,16 @@ export default function useTranslate(scope?: string) {
     translations: Record<string, string>
   }>()
 
-  return (key: string) => {
+  return (key: string, params?: Record<string, string>) => {
     if (scope) {
       key = scope + '.' + key
     }
-    return translations[key] || key
+    let value = translations[key] || key
+    if (params) {
+      for (const key in params) {
+        value = value.replaceAll(`{${key}}`, params[key])
+      }
+    }
+    return value
   }
 }

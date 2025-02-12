@@ -16,10 +16,15 @@ import { ImagePreview } from '#common/ui/components/image_preview'
 import { LinkPreview } from '../components/posts/link_preview'
 import { ProfileAvatar } from '../components/profiles/profile_avatar'
 import { RoomLogo } from '../components/rooms/room_logo'
+import { YouTubeEmbed } from '../components/posts/youtube_embed'
 
 export default function Show({ room, post }: { room: Room; post: Post }) {
   const t = useTranslate()
   const formatDistanceToNow = useFormatDistanceToNow()
+
+  // Check if the link is from YouTube
+  const isYouTubeLink = post.link?.match(/^(https?:\/\/)?(www\.)?(youtube\.com|youtu\.be)\/.+$/)
+
   return (
     <SocialLayout
       title={post.title}
@@ -68,35 +73,40 @@ export default function Show({ room, post }: { room: Room; post: Post }) {
           <h2 className="font-semibold text-xl pt-4 lg:pr-8">{post.title}</h2>
 
           <div className="pt-2">
-            {post.link ? (
-              post.ogImage ? (
-                <LinkPreview
-                  image={{ src: post.ogImage, alt: post.title + "'s Image" }}
-                  title={post.title}
-                  domain={post.link ? new URL(post.link).hostname : undefined}
-                  link={post.link}
-                />
-              ) : (
-                <a
-                  className="transition-colors text-sm text-emerald-800 hover:text-emerald-600 break-all"
-                  href={post.link}
-                  target="_blank"
-                >
-                  {post.link}
-                </a>
-              )
-            ) : null}
+            {post.link && (
+              <>
+                {isYouTubeLink ? (
+                  <YouTubeEmbed url={post.link} />
+                ) : post.ogImage ? (
+                  <LinkPreview
+                    image={{ src: post.ogImage, alt: post.title + "'s Image" }}
+                    title={post.title}
+                    domain={post.link ? new URL(post.link).hostname : undefined}
+                    link={post.link}
+                  />
+                ) : (
+                  <a
+                    className="transition-colors text-sm text-emerald-800 hover:text-emerald-600 break-all"
+                    href={post.link}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    {post.link}
+                  </a>
+                )}
+              </>
+            )}
 
-            {post.text ? (
+            {post.text && (
               <p className="prose pt-2 text-sm whitespace-pre-line">
                 {post.text}
                 <br />
               </p>
-            ) : null}
+            )}
 
-            {post.image ? (
-              <ImagePreview image={{ src: post.image, alt: post.title + 's Image' }} />
-            ) : null}
+            {post.image && (
+              <ImagePreview image={{ src: post.image, alt: post.title + "'s Image" }} />
+            )}
           </div>
 
           <div className="pt-2">

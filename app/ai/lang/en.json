@@ -1,0 +1,15 @@
+{
+  "good_morning": "Good morning, {firstName}!",
+  "good_afternoon": "Good afternoon, {firstName}!",
+  "good_evening": "Good evening, {firstName}!",
+
+  "projects": "Projects",
+  "view_project": "View project",
+  "delete_project": "Delete project",
+
+  "chats": "Chats",
+  "view_chat": "View chat",
+  "delete_chat": "Delete chat",
+
+  "ask_a_question": "Ask a question..."
+}

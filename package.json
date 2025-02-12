@@ -106,6 +106,7 @@
     "@radix-ui/react-toggle-group": "^1.1.1",
     "@radix-ui/react-tooltip": "^1.1.7",
     "@react-email/components": "^0.0.32",
+    "@softwarecitadel/girouette": "^0.0.7",
     "@tailwindcss/vite": "^4.0.0",
     "@vinejs/vine": "^3.0.0",
     "ai": "^4.1.17",

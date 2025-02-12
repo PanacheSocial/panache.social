@@ -5,6 +5,8 @@ import type { HasMany, HasOne } from '@adonisjs/lucid/types/relations'
 import { withAuthFinder } from '@adonisjs/auth/mixins/lucid'
 import BaseModel from './base_model.js'
 import Profile from '#social/models/profile'
+import Project from '#ai/models/project'
+import Chat from '#ai/models/chat'
 
 const AuthFinder = withAuthFinder(() => hash.use('scrypt'), {
   uids: ['username', 'email'],
@@ -50,4 +52,10 @@ export default class User extends compose(BaseModel, AuthFinder) {
 
   @hasMany(() => Profile)
   declare profiles: HasMany<typeof Profile>
+
+  @hasMany(() => Project)
+  declare projects: HasMany<typeof Project>
+
+  @hasMany(() => Chat)
+  declare chats: HasMany<typeof Chat>
 }

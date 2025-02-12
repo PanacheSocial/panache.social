@@ -26,6 +26,8 @@ const shieldConfig = defineConfig({
         'comments.like',
         'comments.unlike',
         'comments.report',
+
+        'ai.chats.chat',
       ]),
     enableXsrfCookie: true,
     methods: ['POST', 'PUT', 'PATCH', 'DELETE'],
