@@ -9,6 +9,7 @@ import WebhooksService from '#common/services/webhooks_service'
 import { Middleware, Patch } from '@softwarecitadel/girouette'
 import { middleware } from '#start/kernel'
 import drive from '@adonisjs/drive/services/main'
+import Profile from '#social/models/profile'
 
 export default class RoomsController {
   async index({ inertia, request }: HttpContext) {
@@ -138,8 +139,17 @@ export default class RoomsController {
       })
     })
 
+    const moderatorProfiles = (
+      await Profile.query()
+        .whereHas('roomMembers', (query) => {
+          query.where('role', 'moderator')
+          query.where('room_id', room.id)
+        })
+        .orderBy('created_at', 'desc')
+    ).map((p) => p.serialize())
+
     if (!auth.isAuthenticated) {
-      return inertia.render('social/room', { room, posts: room.posts })
+      return inertia.render('social/room', { room, posts: room.posts, moderatorProfiles })
     }
 
     const roomMemberFound = await RoomMember.query()
@@ -149,7 +159,13 @@ export default class RoomsController {
     const isMember = roomMemberFound !== null
     const canModerate = auth.user!.role === 'admin' || roomMemberFound?.role === 'moderator'
 
-    return inertia.render('social/room', { room, posts: room.posts, isMember, canModerate })
+    return inertia.render('social/room', {
+      room,
+      posts: room.posts,
+      moderatorProfiles,
+      isMember,
+      canModerate,
+    })
   }
 
   async join({ auth, params, response }: HttpContext) {

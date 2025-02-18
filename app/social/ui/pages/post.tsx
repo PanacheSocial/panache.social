@@ -17,8 +17,17 @@ import { LinkPreview } from '../components/posts/link_preview'
 import { ProfileAvatar } from '../components/profiles/profile_avatar'
 import { RoomLogo } from '../components/rooms/room_logo'
 import { YouTubeEmbed } from '../components/posts/youtube_embed'
+import Profile from '#social/models/profile'
 
-export default function Show({ room, post }: { room: Room; post: Post }) {
+export default function Show({
+  room,
+  moderatorProfiles,
+  post,
+}: {
+  room: Room
+  moderatorProfiles: Profile[]
+  post: Post
+}) {
   const t = useTranslate()
   const formatDistanceToNow = useFormatDistanceToNow()
 

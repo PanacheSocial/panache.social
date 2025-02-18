@@ -88,5 +88,7 @@
   "switch_profile": "Changer de profil",
   "create_new_profile": "Créer un profil",
   "update_logo": "Mettre à jour le logo",
-  "logo_updated": "Logo mis à jour !"
+  "logo_updated": "Logo mis à jour !",
+
+  "moderators": "Modérateurs"
 }

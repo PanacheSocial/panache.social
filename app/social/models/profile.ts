@@ -5,6 +5,7 @@ import type { BelongsTo, HasMany } from '@adonisjs/lucid/types/relations'
 import Comment from '#social/models/comment'
 import Post from '#social/models/post'
 import PostLike from '#social/models/post_like'
+import RoomMember from '#social/models/room_member'
 
 export default class Profile extends BaseModel {
   /**
@@ -33,4 +34,7 @@ export default class Profile extends BaseModel {
 
   @hasMany(() => PostLike)
   declare likes: HasMany<typeof PostLike>
+
+  @hasMany(() => RoomMember)
+  declare roomMembers: HasMany<typeof RoomMember>
 }

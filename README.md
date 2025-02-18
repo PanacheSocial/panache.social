@@ -2,11 +2,7 @@
 
 ## About
 
-Panache is an open-source everything app, in the making.
-
-## Why?
-
-[WeChat in China](https://en.wikipedia.org/wiki/WeChat) and [Kakao in South Korea](https://en.wikipedia.org/wiki/Kakao) proved that everything apps work. Elon Musk wants to build one for the West. We're making it happen now, the open-source way.
+Panache is an open-source social media, in the making.
 
 ## Features
 
@@ -16,10 +12,7 @@ Panache is an open-source everything app, in the making.
 >
 > We are working on a stable release, and we are looking for contributors to help us.
 
-- Panache Social: Send and receive emails
-- Panache AI: Send and receive emails
-- Panache Emails: Send and receive emails
-- and more to come!
+- Panache Social: Join the conversation, share your ideas.
 
 ## Technologies
 
