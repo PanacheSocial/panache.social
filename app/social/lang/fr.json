@@ -90,5 +90,21 @@
   "update_logo": "Mettre à jour le logo",
   "logo_updated": "Logo mis à jour !",
 
-  "moderators": "Modérateurs"
+  "moderators": "Modérateurs",
+
+  "edit_profile": "Modifier le profil",
+  "display_name": "Nom d'affichage",
+  "bio": "Biographie",
+  "website": "Site web",
+  "x_username": "Nom d'utilisateur X",
+  "github_username": "Nom d'utilisateur GitHub",
+  "instagram_username": "Nom d'utilisateur Instagram",
+  "save_changes": "Enregistrer les modifications",
+  "profile_updated": "Profil mis à jour !",
+  "display_name_placeholder": "Entrez votre nom d'affichage",
+  "bio_placeholder": "Parlez-nous un peu de vous...",
+  "website_placeholder": "https://www.votresite.fr",
+  "x_username_placeholder": "Votre nom d'utilisateur X (sans @)",
+  "github_username_placeholder": "Votre nom d'utilisateur GitHub",
+  "instagram_username_placeholder": "Votre nom d'utilisateur Instagram"
 }

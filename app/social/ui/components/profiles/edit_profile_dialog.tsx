@@ -9,33 +9,35 @@ import {
 import { Error } from '#common/ui/components/error'
 import { Input } from '#common/ui/components/input'
 import { Label } from '#common/ui/components/label'
-import useParams from '#common/ui/hooks/use_params'
+import { Textarea } from '#common/ui/components/textarea'
 import { useToast } from '#common/ui/hooks/use_toast'
 import useTranslate from '#common/ui/hooks/use_translate'
 import useUser from '#common/ui/hooks/use_user'
 import { useForm } from '@inertiajs/react'
-import { CheckIcon } from 'lucide-react'
+import { CheckIcon, Pencil } from 'lucide-react'
 import React from 'react'
 
-export function EditUsernameDialog() {
+export function EditProfileDialog() {
   const user = useUser()
   const t = useTranslate()
   const form = useForm({
+    displayName: user?.currentProfile?.displayName || '',
     username: user?.currentProfile?.username || '',
+    bio: user?.currentProfile?.bio || '',
+    websiteUrl: user?.currentProfile?.websiteUrl || '',
   })
   const { toast } = useToast()
   const [open, setOpen] = React.useState(false)
-  const params = useParams()
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
-    form.patch(`/profiles/${user.currentProfile.id}/username`, {
+    form.patch(`/profiles/${user?.currentProfile.id}`, {
       onSuccess: () => {
         toast({
           description: (
             <div className="flex items-center space-x-2">
               <CheckIcon className="text-emerald-700 h-4 w-4" />
-              <span>{t('social.username_updated')}</span>
+              <span>{t('social.profile_updated')}</span>
             </div>
           ),
         })
@@ -43,9 +45,8 @@ export function EditUsernameDialog() {
       },
     })
   }
-  if (!user || user.currentProfile.username !== params.username) {
-    return null
-  }
+
+  if (!user) return null
 
   return (
     <>
@@ -70,29 +71,64 @@ export function EditUsernameDialog() {
       <Dialog open={open} onOpenChange={setOpen}>
         <DialogContent className="sm:max-w-[425px]">
           <DialogHeader>
-            <DialogTitle>{t('social.update_username')}</DialogTitle>
+            <DialogTitle>{t('social.edit_profile')}</DialogTitle>
           </DialogHeader>
-          <form className="mt-4" id="edit-username-form" onSubmit={handleSubmit}>
+          <form className="mt-4 grid gap-4" id="edit-profile-form" onSubmit={handleSubmit}>
             <div className="grid gap-2">
               <Label htmlFor="username">{t('auth.username_label')}</Label>
               <Input
-                autoComplete="panache-username"
                 id="username"
-                name="username"
-                type="text"
-                placeholder="cyrano.bergerac"
-                required
                 value={form.data.username}
                 onChange={(e) =>
                   form.setData('username', e.target.value.toLowerCase().replaceAll(' ', '.'))
                 }
+                placeholder={t('auth.username_placeholder')}
               />
               <Error errorKey="username" />
             </div>
+
+            <hr />
+
+            <div className="grid gap-2">
+              <Label htmlFor="displayName">{t('social.display_name')}</Label>
+              <Input
+                id="displayName"
+                value={form.data.displayName}
+                onChange={(e) => form.setData('displayName', e.target.value)}
+                placeholder={t('social.display_name_placeholder')}
+              />
+              <Error errorKey="displayName" />
+            </div>
+
+            <div className="grid gap-2">
+              <Label htmlFor="bio">{t('social.bio')}</Label>
+              <Textarea
+                id="bio"
+                value={form.data.bio}
+                onChange={(e) => form.setData('bio', e.target.value)}
+                placeholder={t('social.bio_placeholder')}
+              />
+              <Error errorKey="bio" />
+            </div>
+
+            <div className="grid gap-2">
+              <Label htmlFor="websiteUrl">{t('social.website')}</Label>
+              <Input
+                id="websiteUrl"
+                type="url"
+                value={form.data.websiteUrl}
+                onChange={(e) => form.setData('websiteUrl', e.target.value)}
+                placeholder={t('social.website_placeholder')}
+              />
+              <Error errorKey="websiteUrl" />
+            </div>
           </form>
           <DialogFooter className="mt-4">
-            <Button className="!w-full" type="submit" form="edit-username-form">
-              {t('social.update_username')}
+            <Button type="button" variant="secondary" onClick={() => setOpen(false)}>
+              {t('common.cancel')}
+            </Button>
+            <Button type="submit" form="edit-profile-form">
+              {t('social.save_changes')}
             </Button>
           </DialogFooter>
         </DialogContent>

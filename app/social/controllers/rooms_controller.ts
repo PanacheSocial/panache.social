@@ -139,17 +139,20 @@ export default class RoomsController {
       })
     })
 
-    const moderatorProfiles = (
-      await Profile.query()
-        .whereHas('roomMembers', (query) => {
-          query.where('role', 'moderator')
-          query.where('room_id', room.id)
-        })
-        .orderBy('created_at', 'desc')
-    ).map((p) => p.serialize())
+    const moderatorProfiles = await Profile.query()
+      .whereHas('roomMembers', (query) => {
+        query.where('role', 'moderator')
+        query.where('room_id', room.id)
+      })
+      .orderBy('created_at', 'desc')
+    const serializedModeratorProfiles = moderatorProfiles.map((p) => p.serialize())
 
     if (!auth.isAuthenticated) {
-      return inertia.render('social/room', { room, posts: room.posts, moderatorProfiles })
+      return inertia.render('social/room', {
+        room,
+        posts: room.posts,
+        moderatorProfiles: serializedModeratorProfiles,
+      })
     }
 
     const roomMemberFound = await RoomMember.query()
@@ -162,7 +165,7 @@ export default class RoomsController {
     return inertia.render('social/room', {
       room,
       posts: room.posts,
-      moderatorProfiles,
+      moderatorProfiles: serializedModeratorProfiles,
       isMember,
       canModerate,
     })

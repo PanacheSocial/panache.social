@@ -91,5 +91,21 @@
   "update_logo": "Update logo",
   "logo_updated": "Logo updated!",
 
-  "moderators": "Moderators"
+  "moderators": "Moderators",
+
+  "edit_profile": "Edit profile",
+  "display_name": "Display name",
+  "bio": "Bio",
+  "website": "Website",
+  "x_username": "X username",
+  "github_username": "GitHub username",
+  "instagram_username": "Instagram username",
+  "save_changes": "Save changes",
+  "profile_updated": "Profile updated!",
+  "display_name_placeholder": "Enter your display name",
+  "bio_placeholder": "Tell us a bit about yourself...",
+  "website_placeholder": "https://www.yourwebsite.com",
+  "x_username_placeholder": "Your X username (without @)",
+  "github_username_placeholder": "Your GitHub username",
+  "instagram_username_placeholder": "Your Instagram username"
 }

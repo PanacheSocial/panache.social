@@ -233,7 +233,7 @@ function CreatePostForm() {
 
         {type === 'meme' && (
           <>
-            <div className="w-full grid grid-cols-4 gap-x-8">
+            <div className="w-full grid lg:grid-cols-4 gap-x-8 gap-y-8 lg:gap-y-0">
               <div className="col-span-2">
                 <MemeEditor />
               </div>

@@ -1,10 +1,10 @@
 'use client'
 import useTranslate from '#common/ui/hooks/use_translate'
 import type Profile from '#social/models/profile'
-import { Camera, CheckIcon } from 'lucide-react'
+import { Camera, CheckIcon, Globe, Link, User2 } from 'lucide-react'
 import React from 'react'
 import { useRef, useState } from 'react'
-import { EditUsernameDialog } from '../edit_username_dialog'
+import { EditProfileDialog } from './edit_profile_dialog'
 import { ImageCropper } from '../image_cropper'
 import { router } from '@inertiajs/react'
 import { useToast } from '#common/ui/hooks/use_toast'
@@ -77,7 +77,7 @@ export function ProfileHeader({ profile }: { profile: Profile }) {
         callback={handleAvatarUpdate}
       />
       <div className="h-24 bg-[#e3e2d4] rounded-lg border border-sidebar"></div>
-      <div className="flex flex-wrap gap-x-2 items-center justify-between pt-3 px-4 max-w-4xl mx-auto">
+      <div className="flex flex-col flex-wrap gap-x-2 justify-center pt-3 px-4 max-w-4xl mx-auto">
         <div className="flex items-start gap-x-4">
           {profile.id === user?.currentProfileId ? (
             <>
@@ -115,10 +115,40 @@ export function ProfileHeader({ profile }: { profile: Profile }) {
           <div>
             <p className="font-mono font-medium uppercase text-sm">{t('social.profile')}</p>
             <div className="flex items-center space-x-2">
-              <h2 className="text-2xl font-semibold">@{profile.username}</h2>
-              <EditUsernameDialog />
+              <h2 className="text-2xl font-semibold">
+                {profile.displayName ? profile.displayName : `@${profile.username}`}
+              </h2>
+              {profile.id === user?.currentProfileId && <EditProfileDialog />}
             </div>
+            {profile.displayName && (
+              <div className="flex items-center text-lg gap-x-2 text-neutral-600">
+                <span>@{profile.username}</span>
+              </div>
+            )}
           </div>
+        </div>
+        <div className="mt-4 space-y-2 text-sm text-neutral-600 border-t pt-4">
+          {profile.bio && (
+            <div className="flex items-center gap-x-2">
+              <User2 size={16} />
+              <p className="whitespace-pre-wrap">
+                <span>{profile.bio}</span>
+              </p>
+            </div>
+          )}
+          {profile.websiteUrl && (
+            <div className="flex items-center gap-x-2">
+              <Link size={16} />
+              <a
+                href={profile.websiteUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-blue-600 hover:underline"
+              >
+                {profile.websiteUrl}
+              </a>
+            </div>
+          )}
         </div>
       </div>
     </header>

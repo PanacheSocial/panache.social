@@ -23,6 +23,15 @@ export default class Profile extends BaseModel {
   @column()
   declare avatar: string
 
+  @column()
+  declare displayName: string | null
+
+  @column()
+  declare bio: string | null
+
+  @column()
+  declare websiteUrl: string | null
+
   /**
    * Relationships.
    */

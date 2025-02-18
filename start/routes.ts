@@ -128,6 +128,10 @@ router
   .as('profiles.updateUsername')
   .use(middleware.auth())
 router
+  .patch('/profiles/:profileId', [ProfilesController, 'updateProfile'])
+  .as('profiles.updateProfile')
+  .use(middleware.auth())
+router
   .patch('/profiles/:profileId/avatar', [ProfilesController, 'updateAvatar'])
   .as('profiles.updateAvatar')
   .use(middleware.auth())
