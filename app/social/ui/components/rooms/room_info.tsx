@@ -12,7 +12,7 @@ import { ProfileAvatar } from '../profiles/profile_avatar'
 export function RoomInfo({ header, room }: { room: Room; header?: React.ReactElement }) {
   const t = useTranslate()
   const formatDistanceToNow = useFormatDistanceToNow()
-  const { moderatorProfiles } = usePageProps<{ moderatorProfiles: Profile[] }>()
+  const { moderatorProfiles } = usePageProps<{ moderatorProfiles?: Profile[] }>()
 
   return (
     <div className="w-full flex flex-col justify-between rounded-lg bg-[#f0eee6]/50 border p-3 text-sm min-h-32">
@@ -48,7 +48,7 @@ export function RoomInfo({ header, room }: { room: Room; header?: React.ReactEle
           </span>
         </div>
 
-        {moderatorProfiles.length > 0 && (
+        {moderatorProfiles && moderatorProfiles.length > 0 && (
           <div className="mt-4">
             <hr />
             <div className="mt-4">
