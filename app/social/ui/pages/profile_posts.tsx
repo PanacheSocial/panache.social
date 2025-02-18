@@ -8,12 +8,11 @@ import { ProfileTabs } from '../components/profiles/profile_tabs'
 import { ProfileHeader } from '../components/profiles/profile_header'
 import Profile from '#social/models/profile'
 import { RoomLogo } from '../components/rooms/room_logo'
-import useParams from '#common/ui/hooks/use_params'
+import { ProfileAvatar } from '../components/profiles/profile_avatar'
 
 export default function ProfilePosts({ profile }: { profile: Profile }) {
   const t = useTranslate()
   const formatDistanceToNow = useFormatDistanceToNow()
-  const params = useParams()
 
   return (
     <SocialLayout title={`${profile.username} - ${t('social.posts')}`}>
@@ -28,30 +27,53 @@ export default function ProfilePosts({ profile }: { profile: Profile }) {
               post={post}
               room={post.room}
               header={
-                <div className="flex items-start gap-2">
-                  <Link
-                    className="hover:opacity-75 transition-opacity"
-                    href={`/rooms/${post.room.slug}`}
-                  >
-                    <RoomLogo room={post.room} className="h-8 w-8" />
-                  </Link>
-                  <div className="flex flex-col">
-                    <div className="flex items-center gap-1 text-[13px]">
-                      <Link
-                        className="font-medium hover:text-emerald-600 transition-colors"
-                        href={`/rooms/${post.room.slug}`}
-                      >
-                        {post.room.name}
-                      </Link>
-                    </div>
+                post.room ? (
+                  <div className="flex items-start gap-2">
+                    <Link
+                      className="hover:opacity-75 transition-opacity"
+                      href={`/rooms/${post.room.slug}`}
+                    >
+                      <RoomLogo room={post.room} className="h-8 w-8" />
+                    </Link>
+                    <div className="flex flex-col">
+                      <div className="flex items-center gap-1 text-[13px]">
+                        <Link
+                          className="font-medium hover:text-emerald-600 transition-colors"
+                          href={`/rooms/${post.room.slug}`}
+                        >
+                          {post.room.name}
+                        </Link>
+                      </div>
 
-                    <p className="text-muted-foreground text-xs">
-                      <span className="text-black font-medium">@{profile.username}</span>{' '}
-                      {t('social.posted')}{' '}
-                      {formatDistanceToNow(post.createdAt as unknown as string)}
-                    </p>
+                      <p className="text-muted-foreground text-xs">
+                        <span className="text-black font-medium">@{profile.username}</span>{' '}
+                        {t('social.posted')}{' '}
+                        {formatDistanceToNow(post.createdAt as unknown as string)}
+                      </p>
+                    </div>
                   </div>
-                </div>
+                ) : (
+                  <div className="flex items-start gap-2">
+                    <Link
+                      className="hover:opacity-75 transition-opacity"
+                      href={`/profiles/${profile.username}`}
+                    >
+                      <ProfileAvatar profile={profile} className="h-8 w-8" />
+                    </Link>
+                    <div className="text-muted-foreground text-xs flex flex-col">
+                      <Link
+                        className="text-black font-medium hover:text-emerald-600 transition-colors"
+                        href={`/profiles/${profile.username}`}
+                      >
+                        @{profile.username}
+                      </Link>{' '}
+                      <p>
+                        {t('social.posted')}{' '}
+                        {formatDistanceToNow(post.createdAt as unknown as string)}
+                      </p>
+                    </div>
+                  </div>
+                )
               }
             />
           ))}

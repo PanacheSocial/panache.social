@@ -60,26 +60,23 @@ router
   .post('/rooms/:roomSlug/posts', [PostsController, 'store'])
   .as('posts.store')
   .use(middleware.auth())
+router.get('/posts/:postId', [PostsController, 'show']).use(middleware.loadRooms()).as('posts.show')
 router
-  .get('/rooms/:roomSlug/posts/:postId', [PostsController, 'show'])
-  .use(middleware.loadRooms())
-  .as('posts.show')
-router
-  .delete('/rooms/:roomSlug/posts/:postId', [PostsController, 'destroy'])
+  .delete('/posts/:postId', [PostsController, 'destroy'])
   .as('posts.destroy')
   .use(middleware.auth())
 
 router
-  .post('/rooms/:roomSlug/posts/:postId/like', [PostsController, 'like'])
+  .post('/posts/:postId/like', [PostsController, 'like'])
   .as('posts.like')
   .use(middleware.auth())
 router
-  .post('/rooms/:roomSlug/posts/:postId/unlike', [PostsController, 'unlike'])
+  .post('/posts/:postId/unlike', [PostsController, 'unlike'])
   .as('posts.unlike')
   .use(middleware.auth())
 
 router
-  .post('/rooms/:roomSlug/posts/:postId/report', [PostsController, 'report'])
+  .post('/posts/:postId/report', [PostsController, 'report'])
   .as('posts.report')
   .use(middleware.auth())
 

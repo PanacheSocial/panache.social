@@ -14,7 +14,7 @@ import { useToast } from '#common/ui/hooks/use_toast'
 import useTranslate from '#common/ui/hooks/use_translate'
 import useUser from '#common/ui/hooks/use_user'
 import { useForm } from '@inertiajs/react'
-import { CheckIcon, Pencil } from 'lucide-react'
+import { CheckIcon } from 'lucide-react'
 import React from 'react'
 
 export function EditProfileDialog() {

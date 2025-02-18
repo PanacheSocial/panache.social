@@ -6,6 +6,7 @@ import {
   SelectGroup,
   SelectItem,
   SelectLabel,
+  SelectSeparator,
   SelectTrigger,
   SelectValue,
 } from '#common/ui/components/select'
@@ -14,6 +15,9 @@ import useTranslate from '#common/ui/hooks/use_translate'
 import Room from '#social/models/room'
 import React from 'react'
 import { RoomLogo } from './room_logo'
+import useUser from '#common/ui/hooks/use_user'
+import { useCurrentProfile } from '#common/ui/hooks/use_current_profile'
+import { ProfileAvatar } from '../profiles/profile_avatar'
 
 export type RoomSelectProps = {
   rooms: Room[]
@@ -23,7 +27,7 @@ export type RoomSelectProps = {
 
 export default function RoomSelect({ roomSlug, setRoomSlug, rooms }: RoomSelectProps) {
   const t = useTranslate('social')
-  const room = rooms.find((room) => room.slug === roomSlug)
+  const currentProfile = useCurrentProfile()
 
   return (
     <div className="grid gap-2">
@@ -31,18 +35,29 @@ export default function RoomSelect({ roomSlug, setRoomSlug, rooms }: RoomSelectP
       <Select name="roomSlug" value={roomSlug} onValueChange={setRoomSlug}>
         <SelectTrigger className="w-auto">
           <div className="flex items-center space-x-2 pr-2">
-            {room ? <RoomLogo room={room} className="h-6 w-6" /> : null}
-
             <SelectValue placeholder={t('select_a_room')} />
           </div>
         </SelectTrigger>
 
         <SelectContent>
+          <SelectItem value="current-profile">
+            <div className="flex items-center space-x-2 pr-2">
+              <ProfileAvatar profile={currentProfile} className="h-6 w-6" />
+              <p>
+                {currentProfile.displayName || `@${currentProfile.username}`}{' '}
+                <span className="text-sm text-muted-foreground">({t('current_profile')})</span>
+              </p>
+            </div>
+          </SelectItem>
+          <SelectSeparator />
           <SelectGroup>
             <SelectLabel>{t('select_a_room')}</SelectLabel>
             {rooms.map((room) => (
               <SelectItem key={room.id} value={room.slug}>
-                {room.name}
+                <div className="flex items-center space-x-2 pr-2">
+                  <RoomLogo room={room} className="h-6 w-6" />
+                  <span>{room.name}</span>
+                </div>
               </SelectItem>
             ))}
           </SelectGroup>

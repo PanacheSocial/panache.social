@@ -1,13 +1,12 @@
+import React from 'react'
+import { Link } from '@inertiajs/react'
 import useTranslate from '#common/ui/hooks/use_translate'
 import Post from '#social/models/post'
-import Room from '#social/models/room'
 import { JoinRoomButton } from '#social/ui/components/rooms/join_room_button'
 import { PostActions } from '#social/ui/components/posts/post_actions'
 import { PostActionsDropdown } from '#social/ui/components/posts/post_actions_dropdown'
 import { RoomInfo } from '#social/ui/components/rooms/room_info'
 import SocialLayout from '#social/ui/components/social_layout'
-import { Link } from '@inertiajs/react'
-import React from 'react'
 import CreateCommentForm from '../components/comments/create_comment_form'
 import { CommentCard } from '../components/comments/comment_card'
 import { useFormatDistanceToNow } from '#common/ui/hooks/use_format_distance_to_now'
@@ -17,17 +16,8 @@ import { LinkPreview } from '../components/posts/link_preview'
 import { ProfileAvatar } from '../components/profiles/profile_avatar'
 import { RoomLogo } from '../components/rooms/room_logo'
 import { YouTubeEmbed } from '../components/posts/youtube_embed'
-import Profile from '#social/models/profile'
 
-export default function Show({
-  room,
-  moderatorProfiles,
-  post,
-}: {
-  room: Room
-  moderatorProfiles: Profile[]
-  post: Post
-}) {
+export default function Show({ post }: { post: Post }) {
   const t = useTranslate()
   const formatDistanceToNow = useFormatDistanceToNow()
 
@@ -41,37 +31,62 @@ export default function Show({
         'description': post.text || post.title,
         'og:description': post.text || undefined,
         'og:image': post.image || post.ogImage || undefined,
-        'og:url': `https://panache.so/rooms/${room.slug}/posts/${post.id}`,
+        'og:url': `https://panache.so/posts/${post.id}`,
       }}
     >
       <div className="flex flex-col-reverse sm:grid sm:grid-cols-4 gap-y-4 sm:gap-y-0 sm:gap-x-8">
         <div className="col-span-3">
           <div className="flex items-start justify-between">
-            <div className="flex items-center gap-2">
-              <Link className="hover:opacity-75 transition-opacity" href={`/rooms/${room.slug}`}>
-                <RoomLogo room={room} className="h-9 w-9" />
-              </Link>
-              <div className="flex flex-col">
-                <div className="flex items-center gap-1 text-sm">
-                  <Link
-                    className="font-medium text-emerald-950 hover:text-emerald-700 transition-colors"
-                    href={`/rooms/${room.slug}`}
-                  >
-                    {room.name}
-                  </Link>
+            <div className="flex items-start gap-2">
+              {post.room ? (
+                <Link
+                  className="hover:opacity-75 transition-opacity"
+                  href={`/rooms/${post.room.slug}`}
+                >
+                  <RoomLogo room={post.room} className="h-9 w-9" />
+                </Link>
+              ) : (
+                <Link
+                  className="hover:opacity-75 transition-opacity"
+                  href={`/profiles/${post.profile.username}`}
+                >
+                  <ProfileAvatar profile={post.profile} className="h-9 w-9" />
+                </Link>
+              )}
 
-                  <span className="text-muted-foreground">
-                    • {formatDistanceToNow(post.createdAt as unknown as string)}
-                  </span>
-                </div>
-                <div className="flex">
-                  <Link
-                    className="text-xs text-muted-foreground hover:text-emerald-800 transition-colors"
-                    href={`/profiles/${post.profile.username}`}
-                  >
-                    @{post.profile.username}
-                  </Link>
-                </div>
+              <div className="flex items-start justify-start flex-col">
+                {post.room ? (
+                  <div className="flex flex-col">
+                    <div className="flex items-center gap-1 text-sm">
+                      <Link
+                        className="font-medium text-emerald-950 hover:text-emerald-700 transition-colors"
+                        href={`/rooms/${post.room.slug}`}
+                      >
+                        {post.room.name}
+                      </Link>
+                      <span className="text-muted-foreground text-xs">
+                        • {formatDistanceToNow(post.createdAt as unknown as string)}
+                      </span>
+                    </div>
+
+                    <Link
+                      className="text-xs text-muted-foreground hover:text-emerald-800 transition-colors"
+                      href={`/profiles/${post.profile.username}`}
+                    >
+                      @{post.profile.username}
+                    </Link>
+                  </div>
+                ) : (
+                  <p className="text-muted-foreground text-xs flex flex-col">
+                    <Link
+                      className="text-sm font-medium text-foreground hover:text-emerald-800 transition-colors"
+                      href={`/profiles/${post.profile.username}`}
+                    >
+                      @{post.profile.username}
+                    </Link>{' '}
+                    {t('social.posted')} {formatDistanceToNow(post.createdAt as unknown as string)}
+                  </p>
+                )}
               </div>
             </div>
 
@@ -160,17 +175,20 @@ export default function Show({
             ))}
           </section>
         </div>
-        <div className="col-span-1 w-full">
-          <RoomInfo
-            header={
-              <header className="flex flex-wrap items-center justify-between gap-y-2 sm:gap-y-0 sm:gap-x-2">
-                <p className="truncate font-medium text-lg">{room.name}</p>
-                <JoinRoomButton />
-              </header>
-            }
-            room={room}
-          />
-        </div>
+
+        {post.room ? (
+          <div className="col-span-1 w-full">
+            <RoomInfo
+              header={
+                <header className="flex flex-wrap items-center justify-between gap-y-2 sm:gap-y-0 sm:gap-x-2">
+                  <p className="truncate font-medium text-lg">{post.room.name}</p>
+                  <JoinRoomButton />
+                </header>
+              }
+              room={post.room}
+            />
+          </div>
+        ) : null}
       </div>
     </SocialLayout>
   )

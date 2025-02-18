@@ -27,10 +27,9 @@ export function DeletePostDialog({
   const t = useTranslate('social')
   const form = useForm({})
   const { toast } = useToast()
-  const params = useParams()
 
   const handleDelete = () => {
-    form.delete(`/rooms/${post.room.slug}/posts/${post.id}`, {
+    form.delete(`/posts/${post.id}`, {
       onSuccess: () => {
         toast({
           description: (

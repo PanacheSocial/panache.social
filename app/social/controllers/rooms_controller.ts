@@ -46,7 +46,7 @@ export default class RoomsController {
               .where('name', value)
               .orWhere(
                 'id',
-                string.slug(value, { lower: true, replacement: '-', locale: i18n.locale })
+                string.slug(value, { lower: true, replacement: '-', locale: i18n?.locale })
               )
               .first()
             return !roomFoundByName
@@ -60,7 +60,7 @@ export default class RoomsController {
     const room = new Room()
     room.name = data.name
     room.description = data.description
-    room.lang = i18n.locale
+    room.lang = i18n?.locale
     await room.save()
 
     await room.related('members').create({

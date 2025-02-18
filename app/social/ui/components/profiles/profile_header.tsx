@@ -1,7 +1,7 @@
 'use client'
 import useTranslate from '#common/ui/hooks/use_translate'
 import type Profile from '#social/models/profile'
-import { Camera, CheckIcon, Globe, Link, User2 } from 'lucide-react'
+import { Camera, CheckIcon, Link, IdCard } from 'lucide-react'
 import React from 'react'
 import { useRef, useState } from 'react'
 import { EditProfileDialog } from './edit_profile_dialog'
@@ -130,7 +130,7 @@ export function ProfileHeader({ profile }: { profile: Profile }) {
         <div className="mt-4 space-y-2 text-sm text-neutral-600 border-t pt-4">
           {profile.bio && (
             <div className="flex items-center gap-x-2">
-              <User2 size={16} />
+              <IdCard size={16} />
               <p className="whitespace-pre-wrap">
                 <span>{profile.bio}</span>
               </p>

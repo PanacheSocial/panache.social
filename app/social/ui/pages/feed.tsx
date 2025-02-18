@@ -19,12 +19,12 @@ export default function Landing({ posts }: { room: Room; posts: Post[] }) {
         'og:title': 'Panache Social',
       }}
     >
-      <div className="grid sm:grid-cols-3">
+      <div className="grid lg:grid-cols-3">
         <div className="col-span-2">
           <SortBySelect />
         </div>
       </div>
-      <div className="pt-4 grid sm:grid-cols-3 gap-y-4">
+      <div className="pt-4 grid lg:grid-cols-3 gap-y-4">
         {posts.map((post) => (
           <div className="col-span-2" key={post.id}>
             <PostCard

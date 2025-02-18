@@ -108,14 +108,8 @@ export default class PostsController {
   }
 
   async show({ auth, params, request, response, inertia }: HttpContext) {
-    const room = await Room.findBy('slug', params.roomSlug)
-    if (room === null) {
-      return response.notFound('Room not found.')
-    }
-
     const post = await Post.query()
       .where('id', params.postId)
-      .andWhere('room_id', room.id)
       .preload('profile', (query) => {
         query.select('username', 'avatar')
       })
@@ -180,13 +174,13 @@ export default class PostsController {
     let isMember = false
     if (auth.isAuthenticated) {
       const roomMemberFound = await RoomMember.query()
-        .where('room_id', room.id)
+        .where('room_id', post.roomId)
         .where('profile_id', auth.user!.currentProfileId!)
         .first()
       isMember = roomMemberFound !== null
     }
 
-    return inertia.render('social/post', { room, post, isMember })
+    return inertia.render('social/post', { post, isMember })
   }
 
   async create({ inertia }: HttpContext) {
@@ -195,11 +189,20 @@ export default class PostsController {
 
   @inject()
   async store({ auth, params, request, response }: HttpContext, webhooksService: WebhooksService) {
-    const room = await Room.findBy('slug', params.roomSlug)
-    if (room === null) {
-      return response.notFound('Room not found.')
+    /**
+     * Find room (if specified).
+     */
+    let room: Room | null = null
+    if (params.roomSlug !== 'current-profile') {
+      room = await Room.findBy('slug', params.roomSlug)
+      if (room === null) {
+        return response.notFound('Room not found.')
+      }
     }
 
+    /**
+     * Validate post data.
+     */
     const storePostValidator = vine.compile(
       vine.object({
         title: vine.string().minLength(3).maxLength(255),
@@ -215,6 +218,9 @@ export default class PostsController {
     )
     const data = await request.validateUsing(storePostValidator)
 
+    /**
+     * Create post.
+     */
     const post = new Post()
 
     if (data.image) {
@@ -224,21 +230,41 @@ export default class PostsController {
       })
       post.image = await drive.use().getUrl(key)
     }
-    post.roomId = room.id
+
     post.profileId = auth.user!.currentProfileId!
     post.title = data.title
-    if (data.text) post.text = data.text
-    if (data.link) post.link = data.link
+
+    if (room !== null) {
+      post.roomId = room.id
+    }
+
+    if (data.text) {
+      post.text = data.text
+    }
+
+    if (data.link) {
+      post.link = data.link
+    }
+
     await post.save()
 
+    /**
+     * Send webhook.
+     */
     await webhooksService.send(
       `[+] [Post ${post.id} created with title ${post.title} by profile ${post.profileId}]`
     )
 
-    return response.redirect().toRoute('posts.show', [room.slug, post.id])
+    /**
+     * Redirect to post or room.
+     */
+    return response.redirect().toRoute('posts.show', [post.id])
   }
 
   async destroy({ bouncer, params, response }: HttpContext) {
+    /**
+     * Find post.
+     */
     const post = await Post.query()
       .where('id', params.postId)
       .preload('room', (query) => {

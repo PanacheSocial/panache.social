@@ -33,7 +33,7 @@ export default class ProfilesController {
   async comments({ auth, params, inertia, response }: HttpContext) {
     const profile = await Profile.query()
       .where('username', params.username)
-      .select('id', 'username', 'avatar')
+      .select('id', 'username', 'avatar', 'displayName', 'bio', 'websiteUrl')
       .preload('comments', (query) => {
         query.preload('post', (q) => {
           q.preload('room')

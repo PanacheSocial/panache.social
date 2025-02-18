@@ -68,7 +68,7 @@ function CreatePostForm() {
   const { canvas } = useMemeEditorContext()
 
   const urlQuerySuffix = query.room ? `?room=${query.room}` : ''
-  const defaultRoomSlug = query.room ? query.room : rooms.length > 0 ? rooms[0].slug : ''
+  const defaultRoomSlug = query.room ? query.room : 'current-profile'
   const [roomSlug, setRoomSlug] = React.useState(defaultRoomSlug)
 
   const form = useForm({

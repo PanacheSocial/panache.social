@@ -1,4 +1,3 @@
-// components/posts/youtube_embed.tsx
 import React from 'react'
 
 interface YouTubeEmbedProps {

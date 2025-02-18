@@ -46,7 +46,7 @@ export default function Comments({ comments }: { comments: Comment[] }) {
                       <span>•</span>
                       <Link
                         className="font-medium text-muted-foreground hover:text-emerald-600 transition-colors truncate"
-                        href={`/rooms/${comment.post.room.slug}/posts/${comment.post.id}`}
+                        href={`/posts/${comment.post.id}`}
                       >
                         {comment.post.title}
                       </Link>

@@ -1,5 +1,3 @@
-import { buttonVariants } from '#common/ui/components/button'
-import useTranslate from '#common/ui/hooks/use_translate'
 import Post from '#social/models/post'
 import Room from '#social/models/room'
 import { PostCard } from '#social/ui/components/posts/post_card'

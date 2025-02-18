@@ -22,7 +22,7 @@ export function PostCard({ header, post }: PostCardProps) {
   const isYouTubeLink = post.link?.match(/^(https?:\/\/)?(www\.)?(youtube\.com|youtu\.be)\/.+$/)
 
   return (
-    <Link href={`/rooms/${post.room.slug}/posts/${post.id}`}>
+    <Link href={`/posts/${post.id}`}>
       <Card className={cn(!cancelHover && 'hover:bg-accent', 'transition-colors max-w-[80vw]')}>
         <div className="p-4">
           {header}
