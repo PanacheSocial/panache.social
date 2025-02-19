@@ -106,5 +106,11 @@
   "bio_placeholder": "Tell us a bit about yourself...",
   "website_placeholder": "https://www.yourwebsite.com",
 
-  "current_profile": "Current profile"
+  "current_profile": "Current profile",
+  "following": "Following",
+  "followers": "Followers",
+  "follow": "Follow",
+  "unfollow": "Unfollow",
+  "follow_success": "You are now following this profile!",
+  "unfollow_success": "You are no longer following this profile!"
 }

@@ -17,7 +17,7 @@ export default function ProfilePosts({ profile }: { profile: Profile }) {
   return (
     <SocialLayout title={`${profile.username} - ${t('social.posts')}`}>
       <div className="space-y-8">
-        <ProfileHeader profile={profile} />
+        <ProfileHeader />
         <ProfileTabs resource="posts" />
 
         <div className="gap-y-4 flex flex-col max-w-4xl mx-auto">

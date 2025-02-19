@@ -18,11 +18,12 @@ import usePath from '#common/ui/hooks/use_path'
 import he from 'he'
 
 export type SocialLayoutProps = React.PropsWithChildren<{
+  className?: string
   title?: string
   meta?: Record<string, string | undefined>
 }>
 
-export default function SocialLayout({ children, meta, title }: SocialLayoutProps) {
+export default function SocialLayout({ className, children, meta, title }: SocialLayoutProps) {
   const t = useTranslate()
   const user = useUser()
   const { joinedRooms, popularRooms } = usePageProps<{
@@ -91,7 +92,7 @@ export default function SocialLayout({ children, meta, title }: SocialLayoutProp
           </header>
           <Toaster />
 
-          <main className="p-8">{children}</main>
+          <main className={cn('p-8', className)}>{children}</main>
         </SidebarInset>
       </SidebarProvider>
     </>

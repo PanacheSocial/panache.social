@@ -132,3 +132,20 @@ router
   .patch('/profiles/:profileId/avatar', [ProfilesController, 'updateAvatar'])
   .as('profiles.updateAvatar')
   .use(middleware.auth())
+router
+  .post('/profiles/:profileId/follow', [ProfilesController, 'follow'])
+  .as('profiles.follow')
+  .use(middleware.auth())
+router
+  .post('/profiles/:profileId/unfollow', [ProfilesController, 'unfollow'])
+  .as('profiles.unfollow')
+  .use(middleware.auth())
+router
+  .get('/profiles/:username/following', [ProfilesController, 'following'])
+  .as('profiles.following')
+  .use(middleware.loadRooms())
+
+router
+  .get('/profiles/:username/followers', [ProfilesController, 'followers'])
+  .as('profiles.followers')
+  .use(middleware.loadRooms())
