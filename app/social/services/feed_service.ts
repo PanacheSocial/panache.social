@@ -7,6 +7,7 @@ import { DateTime } from 'luxon'
 export class FeedService {
   newPostQuery(user?: User) {
     const query = Post.query()
+    query.whereNotNull('room_id')
 
     if (user) {
       query.preload('likes', (query) => {
