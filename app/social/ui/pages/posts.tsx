@@ -18,6 +18,7 @@ export default function Posts({ posts }: { posts: Post[] }) {
 
   return (
     <>
+      <h1 className="text-3xl font-bold pb-8">{t('social.explore')}</h1>
       <SearchTabs resource="posts" />
       <div className="pt-4 grid gap-y-4">
         {posts.map((post) => {

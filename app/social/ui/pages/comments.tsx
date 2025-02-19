@@ -16,7 +16,10 @@ export default function Comments({ comments }: { comments: Comment[] }) {
 
   return (
     <>
+      <h1 className="text-3xl font-bold pb-8">{t('social.explore')}</h1>
+     
       <SearchTabs resource="comments" />
+     
       <div className="grid gap-y-4 pt-4">
         {comments.map((comment) => (
           <CommentCard
