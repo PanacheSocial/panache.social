@@ -140,12 +140,3 @@ router
   .post('/profiles/:profileId/unfollow', [ProfilesController, 'unfollow'])
   .as('profiles.unfollow')
   .use(middleware.auth())
-router
-  .get('/profiles/:username/following', [ProfilesController, 'following'])
-  .as('profiles.following')
-  .use(middleware.loadRooms())
-
-router
-  .get('/profiles/:username/followers', [ProfilesController, 'followers'])
-  .as('profiles.followers')
-  .use(middleware.loadRooms())
