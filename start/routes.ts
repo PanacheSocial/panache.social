@@ -50,6 +50,7 @@ router.post('/rooms/:roomSlug/quit', [RoomsController, 'quit']).use(middleware.a
 
 const PostsController = () => import('#social/controllers/posts_controller')
 router.get('/', [PostsController, 'feed']).use(middleware.loadRooms())
+router.get('/popular', [PostsController, 'popular']).use(middleware.loadRooms())
 
 router.get('/posts', [PostsController, 'index']).use(middleware.loadRooms())
 router

@@ -4,22 +4,25 @@ export function useLocale() {
   const { locale } = usePageProps<{ locale: string }>()
   return locale
 }
-
-export default function useTranslate(scope?: string) {
-  const { translations } = usePageProps<{
-    translations: Record<string, string>
-  }>()
-
-  return (key: string, params?: Record<string, string | number>) => {
+export function useTranslateFunc(translations: Record<string, string>, scope?: string) {
+  return (key: string, params?: Record<string, string>) => {
     if (scope) {
       key = scope + '.' + key
     }
     let value = translations[key] || key
     if (params) {
       for (const key in params) {
-        value = value.replaceAll(`{${key}}`, params[key].toString())
+        value = value.replaceAll(`{${key}}`, params[key])
       }
     }
     return value
   }
+}
+
+export default function useTranslate(scope?: string) {
+  const { translations } = usePageProps<{
+    translations: Record<string, string>
+  }>()
+
+  return useTranslateFunc(translations, scope)
 }

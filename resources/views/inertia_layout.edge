@@ -22,7 +22,7 @@
       `app/${page.component.split('/')[0]}/ui/pages/${page.component.split('/').splice(1)}.tsx`
     ])
   </head>
-  <body class="min-h-screen w-screen font-sans">
+  <body class="min-h-screen w-screen font-sans overflow-y-auto" scroll-region>
     @inertia()
   </body>
 </html>

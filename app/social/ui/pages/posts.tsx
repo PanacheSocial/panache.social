@@ -17,51 +17,53 @@ export default function Posts({ posts }: { posts: Post[] }) {
   const params = useParams()
 
   return (
-    <SocialLayout>
+    <>
       <SearchTabs resource="posts" />
       <div className="pt-4 grid gap-y-4">
-        {posts.map((post) => (
-          <PostCard
-            key={post.id}
-            post={post}
-            room={post.room}
-            header={
-              <div className="flex items-center justify-between">
-                <div className="flex items-center gap-2">
-                  <Link
-                    className="hover:opacity-75 transition-opacity"
-                    href={`/rooms/${post.room.slug}`}
-                  >
-                    <ProfileAvatar profile={post.profile} className="h-8 w-8" />
-                  </Link>
+        {posts.map((post) => {
+          return (
+            <PostCard
+              key={post.id}
+              post={post}
+              room={post.room}
+              header={
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center gap-2">
+                    <Link
+                      className="hover:opacity-75 transition-opacity"
+                      href={`/rooms/${post.room.slug}`}
+                    >
+                      <ProfileAvatar profile={post.profile} className="h-8 w-8" />
+                    </Link>
 
-                  <div className="flex flex-col">
-                    <div className="flex items-center gap-1 text-[13px]">
-                      <Link
-                        className="font-medium hover:text-emerald-600 transition-colors"
-                        href={`/rooms/${post.room.slug}`}
-                      >
-                        {post.room.name}
-                      </Link>
-                      <span className="text-muted-foreground">
-                        • {formatDistanceToNow(post.createdAt as unknown as string)}
-                      </span>
-                    </div>
+                    <div className="flex flex-col">
+                      <div className="flex items-center gap-1 text-[13px]">
+                        <Link
+                          className="font-medium hover:text-emerald-600 transition-colors"
+                          href={`/rooms/${post.room.slug}`}
+                        >
+                          {post.room.name}
+                        </Link>
+                        <span className="text-muted-foreground">
+                          • {formatDistanceToNow(post.createdAt as unknown as string)}
+                        </span>
+                      </div>
 
-                    <div className="flex">
-                      <Link
-                        className="text-xs text-muted-foreground hover:text-emerald-800 transition-colors"
-                        href={`/profiles/${post.profile.username}`}
-                      >
-                        @{post.profile.username}
-                      </Link>
+                      <div className="flex">
+                        <Link
+                          className="text-xs text-muted-foreground hover:text-emerald-800 transition-colors"
+                          href={`/profiles/${post.profile.username}`}
+                        >
+                          @{post.profile.username}
+                        </Link>
+                      </div>
                     </div>
                   </div>
                 </div>
-              </div>
-            }
-          />
-        ))}
+              }
+            />
+          )
+        })}
         {posts.length === 0 ? (
           <Alert>
             <SearchX className="h-5 w-5 stroke-red-700" />
@@ -70,6 +72,8 @@ export default function Posts({ posts }: { posts: Post[] }) {
           </Alert>
         ) : null}
       </div>
-    </SocialLayout>
+    </>
   )
 }
+
+Posts.layout = SocialLayout
