@@ -28,8 +28,8 @@ export default function Landing(feed: Feed) {
     >
       <PostFeed {...feed} />
       {feed.posts.length === 0 && (
-        <div className="flex items-center">
-          <div className="p-8">
+        <div className="md:flex items-center">
+          <div className="md:px-8 py-8">
             <AsciiCyrano />
           </div>
           <div className="space-y-4">
