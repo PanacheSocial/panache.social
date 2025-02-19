@@ -10,7 +10,7 @@ import useTranslate from '#common/ui/hooks/use_translate'
 export default function Rooms({ roomsList }: { roomsList: Room[] }) {
   const t = useTranslate()
   return (
-    <SocialLayout>
+    <>
       <SearchTabs resource="rooms" />
 
       <div className="grid gap-y-4 pt-4">
@@ -25,6 +25,8 @@ export default function Rooms({ roomsList }: { roomsList: Room[] }) {
           </Alert>
         ) : null}
       </div>
-    </SocialLayout>
+    </>
   )
 }
+
+Rooms.layout = SocialLayout

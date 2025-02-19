@@ -4,65 +4,69 @@ import React from 'react'
 import { NavRooms } from './rooms/nav_rooms'
 import { Head, Link } from '@inertiajs/react'
 import { buttonVariants } from '#common/ui/components/button'
-import useTranslate from '#common/ui/hooks/use_translate'
-import { Home, PlusCircleIcon } from 'lucide-react'
+import { useTranslateFunc } from '#common/ui/hooks/use_translate'
+import { Home, PlusCircleIcon, Telescope, TrendingUp } from 'lucide-react'
 import { SearchInput } from './search_input'
 import { Toaster } from '#common/ui/components/toaster'
 import { SocialDropdown } from './social_dropdown'
-import useUser from '#common/ui/hooks/use_user'
 import { cn } from '#common/ui/lib/utils'
-import usePageProps from '#common/ui/hooks/use_page_props'
 import Room from '#social/models/room'
 import { NavMain } from '#common/ui/components/nav_main'
-import usePath from '#common/ui/hooks/use_path'
-import he from 'he'
+import User from '#common/models/user'
 
 export type SocialLayoutProps = React.PropsWithChildren<{
-  title?: string
-  meta?: Record<string, string | undefined>
-}>
-
-export default function SocialLayout({ children, meta, title }: SocialLayoutProps) {
-  const t = useTranslate()
-  const user = useUser()
-  const { joinedRooms, popularRooms } = usePageProps<{
+  pageProps: {
     popularRooms: Room[]
     joinedRooms?: Room[]
-  }>()
-  const path = usePath()
-  title = he.escape(`Panache Social${title ? ` - ${title}` : ''}`)
+    translations: Record<string, string>
+    user?: User
+    path: string
+  }
+}>
+
+const getMenu = (t: (key: string) => string, path: string, authenticated: boolean) => {
+  const popularPath = authenticated ? '/popular' : '/'
+  const navMain = [
+    {
+      title: t('social.popular'),
+      icon: TrendingUp,
+      url: popularPath,
+      isActive: path === popularPath,
+    },
+    {
+      title: t('social.explore'),
+      icon: Telescope,
+      url: '/rooms',
+      isActive: ['/rooms', '/posts', '/comments'].includes(path),
+    },
+  ]
+
+  if (authenticated) {
+    return [
+      {
+        title: t('common.home'),
+        url: '/',
+        icon: Home,
+        isActive: path === '/',
+      },
+      ...navMain,
+    ]
+  }
+
+  return navMain
+}
+
+function SocialLayoutC({
+  children,
+  pageProps: { popularRooms, joinedRooms, user, translations, path },
+}: SocialLayoutProps) {
+  const t = useTranslateFunc(translations)
 
   return (
     <>
-      <Head>
-        <title>{title}</title>
-        {title ? <meta name="title" content={title} /> : null}
-        {meta &&
-          Object.entries(meta).map((metaItem) => {
-            if (!metaItem || !metaItem[1]) return
-            const [name, content] = metaItem
-            return (
-              <meta
-                key={name}
-                name={he.escape(name.slice(0, 100))}
-                content={he.escape(content.slice(0, 100))}
-              />
-            )
-          })}
-      </Head>
-
       <SidebarProvider>
         <AppSidebar moduleName="Social">
-          <NavMain
-            items={[
-              {
-                title: t('common.home'),
-                url: '/',
-                icon: Home,
-                isActive: path === '/',
-              },
-            ]}
-          />
+          <NavMain items={getMenu(t, path, !!user)} />
 
           {joinedRooms && joinedRooms.length > 0 && (
             <NavRooms title={t('social.rooms')} rooms={joinedRooms} />
@@ -97,3 +101,6 @@ export default function SocialLayout({ children, meta, title }: SocialLayoutProp
     </>
   )
 }
+const SocialLayout = (page: any) => <SocialLayoutC pageProps={page.props}>{page}</SocialLayoutC>
+
+export default SocialLayout

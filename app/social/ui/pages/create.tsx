@@ -41,14 +41,14 @@ export default function Create() {
         </Head>
       ) : null}
       <MemeEditorProvider>
-        <SocialLayout>
-          <h1 className="text-2xl font-semibold">{t('create_a_post')}</h1>
-          <CreatePostForm />
-        </SocialLayout>
+        <h1 className="text-2xl font-semibold">{t('create_a_post')}</h1>
+        <CreatePostForm />
       </MemeEditorProvider>
     </>
   )
 }
+
+Create.layout = SocialLayout
 
 function CreatePostForm() {
   const t = useTranslate('social')

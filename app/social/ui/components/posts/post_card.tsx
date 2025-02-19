@@ -20,9 +20,8 @@ export function PostCard({ header, post }: PostCardProps) {
 
   // Check if the link is from YouTube
   const isYouTubeLink = post.link?.match(/^(https?:\/\/)?(www\.)?(youtube\.com|youtu\.be)\/.+$/)
-
   return (
-    <Link href={`/posts/${post.id}`}>
+    <Link href={`/posts/${post.id}`} as="div" className="cursor-pointer">
       <Card className={cn(!cancelHover && 'hover:bg-accent', 'transition-colors max-w-[80vw]')}>
         <div className="p-4">
           {header}
@@ -40,7 +39,7 @@ export function PostCard({ header, post }: PostCardProps) {
             {post.link && !isYouTubeLink && !post.ogImage && (
               <a
                 href={post.link}
-                className="transition-colors text-sm text-emerald-800 hover:text-emerald-600 truncate break-all"
+                className="transition-colors text-sm text-emerald-800 hover:text-emerald-600 truncate break-all w-min"
                 target="_blank"
                 rel="noopener noreferrer"
                 onClick={(e) => e.stopPropagation()}
