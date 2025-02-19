@@ -10,16 +10,16 @@ export default class CommentsController {
   async index({ inertia, request }: HttpContext) {
     const postsQueryValidator = vine.compile(
       vine.object({
-        searchQuery: vine.string().optional(),
+        search: vine.string().optional(),
         page: vine.number().positive().withoutDecimals().min(1).optional(),
       })
     )
     const data = await request.validateUsing(postsQueryValidator)
 
     const result = await Comment.query()
-      .if(data.searchQuery, (query) => {
+      .if(data.search, (query) => {
         query.whereRaw(`unaccent(LOWER(text)) LIKE unaccent(?)`, [
-          `%${data.searchQuery?.toLowerCase()}%`,
+          `%${data.search?.toLowerCase()}%`,
         ])
       })
       .preload('post', (query) => {

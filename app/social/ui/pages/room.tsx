@@ -1,7 +1,6 @@
 import Post from '#social/models/post'
 import Room from '#social/models/room'
 import { PostCard } from '#social/ui/components/posts/post_card'
-import SocialLayout from '#social/ui/components/social_layout'
 import { SortBySelect } from '#social/ui/components/sort_by_select'
 import { Link } from '@inertiajs/react'
 import React from 'react'
@@ -9,6 +8,8 @@ import { RoomInfo } from '#social/ui/components/rooms/room_info'
 import { useFormatDistanceToNow } from '#common/ui/hooks/use_format_distance_to_now'
 import { ProfileAvatar } from '../components/profiles/profile_avatar'
 import { RoomHeader } from '../components/rooms/room_header'
+import { PageMeta } from '../components/page_meta'
+import SocialLayout from '../components/social_layout'
 
 export default function Show({
   room,
@@ -21,7 +22,7 @@ export default function Show({
 }) {
   const formatDistanceToNow = useFormatDistanceToNow()
   return (
-    <SocialLayout
+    <PageMeta
       title={room.name}
       meta={{
         'description': room.description,
@@ -72,6 +73,8 @@ export default function Show({
           <RoomInfo room={room} />
         </div>
       </div>
-    </SocialLayout>
+    </PageMeta>
   )
 }
+
+Show.layout = SocialLayout

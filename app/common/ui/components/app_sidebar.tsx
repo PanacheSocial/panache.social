@@ -1,7 +1,7 @@
 'use client'
 
-import * as React from 'react'
-import { BotIcon, MailsIcon, MessagesSquare, Share2Icon } from 'lucide-react'
+import React, { useMemo } from 'react'
+import { BotIcon, Home, MailsIcon, MessagesSquare, Telescope, TrendingUp } from 'lucide-react'
 
 import { NavSecondary } from '#common/ui/components/nav_secondary'
 import { NavUser } from '#common/ui/components/nav_user'
@@ -11,7 +11,6 @@ import {
   SidebarFooter,
   SidebarHeader,
   SidebarMenu,
-  SidebarMenuButton,
   SidebarMenuItem,
 } from './sidebar'
 import useUser from '#common/ui/hooks/use_user'

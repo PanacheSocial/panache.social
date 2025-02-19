@@ -7,32 +7,34 @@ import PostPolicy from '#social/policies/post_policy'
 import { inject } from '@adonisjs/core'
 import { HttpContext } from '@adonisjs/core/http'
 import vine from '@vinejs/vine'
-import { DateTime } from 'luxon'
 import { cuid } from '@adonisjs/core/helpers'
 import drive from '@adonisjs/drive/services/main'
+import { FeedService } from '#social/services/feed_service'
 
+@inject()
 export default class PostsController {
+  constructor(protected feedService: FeedService) {}
   async index({ auth, inertia, request }: HttpContext) {
     const postsQueryValidator = vine.compile(
       vine.object({
-        searchQuery: vine.string().optional(),
+        search: vine.string().optional(),
         page: vine.number().positive().withoutDecimals().min(1).optional(),
       })
     )
     const data = await request.validateUsing(postsQueryValidator)
 
     const result = await Post.query()
-      .if(data.searchQuery, (query) => {
+      .if(data.search, (query) => {
         query.whereRaw(
           `unaccent(LOWER(title)) LIKE unaccent(?) OR unaccent(LOWER(text)) LIKE unaccent(?)`,
-          [`%${data.searchQuery?.toLowerCase()}%`, `%${data.searchQuery?.toLowerCase()}%`]
+          [`%${data.search?.toLowerCase()}%`, `%${data.search?.toLowerCase()}%`]
         )
       })
       .preload('profile', (query) => {
         query.select('username', 'avatar')
       })
       .preload('room', (query) => {
-        query.select('name')
+        query.select('name', 'slug')
       })
       .if(auth.isAuthenticated, (query) => {
         query.preload('likes', (query) => {
@@ -44,67 +46,32 @@ export default class PostsController {
     return inertia.render('social/posts', { posts: result.all() })
   }
 
+  async popular({ inertia, auth, request }: HttpContext) {
+    const sortMethod = request.input('method', 'popular')
+    const period = request.input('period', 'day')
+    const page = request.input('page', 1)
+
+    const feed = await this.feedService.popular(sortMethod, period, page, auth.user)
+
+    if (request.wantsJSON()) {
+      return feed
+    }
+
+    return inertia.render('social/popular', feed)
+  }
+
   async feed({ auth, request, inertia }: HttpContext) {
     const sortMethod = request.input('method', 'popular')
     const period = request.input('period', 'day')
     const page = request.input('page', 1)
-    const rooms = await Room.query().orderBy('members_count', 'desc').limit(10)
 
-    const postsQuery = Post.query().whereIn(
-      'room_id',
-      rooms.map((room) => room.id)
-    )
-    // Filter posts by the selected period
-    if (sortMethod === 'popular') {
-      let startDate: DateTime | null = null
+    const feed = await this.feedService.userFeed(sortMethod, period, page, auth.user)
 
-      switch (period) {
-        case 'day':
-          startDate = DateTime.now().minus({ days: 1 })
-          break
-        case 'week':
-          startDate = DateTime.now().minus({ weeks: 1 })
-          break
-        case 'month':
-          startDate = DateTime.now().minus({ months: 1 })
-          break
-        case 'all':
-          startDate = null
-          break
-      }
-
-      if (startDate) {
-        postsQuery.where('created_at', '>=', startDate.toString())
-      }
+    if (request.wantsJSON()) {
+      return feed
     }
 
-    // Sort posts based on the selected method
-    switch (sortMethod) {
-      case 'popular':
-        postsQuery.orderBy('likes_count', 'desc')
-        break
-      case 'new':
-        postsQuery.orderBy('created_at', 'desc')
-        break
-    }
-    postsQuery.preloadOnce('room')
-    postsQuery.preload('profile', (query) => {
-      query.select('username', 'avatar')
-    })
-    postsQuery.paginate(page, 20)
-
-    /**
-     * Load post likes.
-     */
-    if (auth.isAuthenticated) {
-      postsQuery.preload('likes', (query) => {
-        query.where('profile_id', auth.user!.currentProfileId!)
-      })
-    }
-
-    const posts = await postsQuery
-
-    return inertia.render('social/feed', { rooms, posts })
+    return inertia.render('social/feed', feed)
   }
 
   async show({ auth, params, request, response, inertia }: HttpContext) {

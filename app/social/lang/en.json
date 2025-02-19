@@ -1,4 +1,5 @@
 {
+  "explore": "Explorer",
   "room": "Room",
   "rooms": "Rooms",
   "select_a_room": "Select a room",
@@ -66,7 +67,6 @@
   "update_avatar": "Update avatar",
   "avatar_updated": "Avatar updated!",
   "feed": "Feed",
-
   "template": "Template",
   "background_color": "Background color",
   "text_color": "Text color",
@@ -84,15 +84,12 @@
   "others": "Others",
   "select_meme_template": "Select a meme template",
   "search_memes": "Search memes",
-
   "profile_created": "Profile created!",
   "switch_profile": "Switch profile",
   "create_new_profile": "Create new profile",
   "update_logo": "Update logo",
   "logo_updated": "Logo updated!",
-
   "moderators": "Moderators",
-
   "edit_profile": "Edit profile",
   "display_name": "Display name",
   "bio": "Bio",
@@ -105,6 +102,7 @@
   "display_name_placeholder": "Enter your display name",
   "bio_placeholder": "Tell us a bit about yourself...",
   "website_placeholder": "https://www.yourwebsite.com",
-
-  "current_profile": "Current profile"
+  "current_profile": "Current profile",
+  "empty_here": "It's empty here",
+  "home_feed_no_posts_message": "Join more rooms to see posts in your feed."
 }

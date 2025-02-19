@@ -4,12 +4,7 @@ export function useLocale() {
   const { locale } = usePageProps<{ locale: string }>()
   return locale
 }
-
-export default function useTranslate(scope?: string) {
-  const { translations } = usePageProps<{
-    translations: Record<string, string>
-  }>()
-
+export function useTranslateFunc(translations: Record<string, string>, scope?: string) {
   return (key: string, params?: Record<string, string>) => {
     if (scope) {
       key = scope + '.' + key
@@ -22,4 +17,12 @@ export default function useTranslate(scope?: string) {
     }
     return value
   }
+}
+
+export default function useTranslate(scope?: string) {
+  const { translations } = usePageProps<{
+    translations: Record<string, string>
+  }>()
+
+  return useTranslateFunc(translations, scope)
 }
