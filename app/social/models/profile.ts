@@ -6,6 +6,7 @@ import Comment from '#social/models/comment'
 import Post from '#social/models/post'
 import PostLike from '#social/models/post_like'
 import RoomMember from '#social/models/room_member'
+import Follow from '#social/models/follow'
 
 export default class Profile extends BaseModel {
   /**
@@ -32,6 +33,12 @@ export default class Profile extends BaseModel {
   @column()
   declare websiteUrl: string | null
 
+  @column()
+  declare followersCount: number
+
+  @column()
+  declare followingCount: number
+
   /**
    * Relationships.
    */
@@ -46,4 +53,14 @@ export default class Profile extends BaseModel {
 
   @hasMany(() => RoomMember)
   declare roomMembers: HasMany<typeof RoomMember>
+
+  @hasMany(() => Follow, {
+    foreignKey: 'followerId',
+  })
+  declare following: HasMany<typeof Follow>
+
+  @hasMany(() => Follow, {
+    foreignKey: 'followingId',
+  })
+  declare followers: HasMany<typeof Follow>
 }

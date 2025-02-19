@@ -1,27 +1,33 @@
 'use client'
 import useTranslate from '#common/ui/hooks/use_translate'
 import type Profile from '#social/models/profile'
-import { Camera, CheckIcon, Link, IdCard } from 'lucide-react'
+import { Camera, CheckIcon, IdCard, LinkIcon } from 'lucide-react'
 import React from 'react'
 import { useRef, useState } from 'react'
 import { EditProfileDialog } from './edit_profile_dialog'
 import { ImageCropper } from '../image_cropper'
-import { router } from '@inertiajs/react'
+import { Link, router } from '@inertiajs/react'
 import { useToast } from '#common/ui/hooks/use_toast'
 import { ProfileAvatar } from './profile_avatar'
 import useUser from '#common/ui/hooks/use_user'
+import usePageProps from '#common/ui/hooks/use_page_props'
+import { FollowButton } from './follow_button'
 
-export function ProfileHeader({ profile }: { profile: Profile }) {
+export function ProfileHeader() {
+  const { profile, isFollowing } = usePageProps<{ profile: Profile; isFollowing: boolean }>()
   const t = useTranslate()
   const fileInputRef = useRef<HTMLInputElement>(null)
   const [isHovering, setIsHovering] = useState(false)
   const [cropperOpen, setCropperOpen] = useState(false)
   const [selectedFile, setSelectedFile] = useState<string>('')
   const { toast } = useToast()
+  const user = useUser()
+
+  const isOwnProfile = profile.id === user?.currentProfileId
+
   const handleAvatarClick = () => {
     fileInputRef.current?.click()
   }
-  const user = useUser()
 
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0]
@@ -76,55 +82,61 @@ export function ProfileHeader({ profile }: { profile: Profile }) {
         title={t('social.update_avatar')}
         callback={handleAvatarUpdate}
       />
+
       <div className="h-24 bg-[#e3e2d4] rounded-lg border border-sidebar"></div>
+
       <div className="flex flex-col flex-wrap gap-x-2 justify-center pt-3 px-4 max-w-4xl mx-auto">
-        <div className="flex items-start gap-x-4">
-          {profile.id === user?.currentProfileId ? (
-            <>
-              <div
-                className="relative -mt-10 cursor-pointer group"
-                onMouseEnter={() => setIsHovering(true)}
-                onMouseLeave={() => setIsHovering(false)}
-                onClick={handleAvatarClick}
-              >
-                <ProfileAvatar
-                  profile={profile}
-                  className="h-24 w-24 rounded-3xl border-4 border-white transition-opacity duration-200 ease-in-out group-hover:opacity-90"
-                />
+        <div className="flex items-start justify-between">
+          <div className="flex items-start gap-x-4">
+            {isOwnProfile ? (
+              <>
                 <div
-                  className={`absolute inset-0 flex items-center justify-center rounded-3xl transition-opacity duration-200 ease-in-out ${isHovering ? 'opacity-100' : 'opacity-0'}`}
+                  className="relative -mt-10 cursor-pointer group"
+                  onMouseEnter={() => setIsHovering(true)}
+                  onMouseLeave={() => setIsHovering(false)}
+                  onClick={handleAvatarClick}
                 >
-                  <Camera className="text-white drop-shadow-md" size={24} />
-                  <span className="sr-only">Update avatar</span>
+                  <ProfileAvatar
+                    profile={profile}
+                    className="h-24 w-24 rounded-3xl border-4 border-white transition-opacity duration-200 ease-in-out group-hover:opacity-90"
+                  />
+                  <div
+                    className={`absolute inset-0 flex items-center justify-center rounded-3xl transition-opacity duration-200 ease-in-out ${isHovering ? 'opacity-100' : 'opacity-0'}`}
+                  >
+                    <Camera className="text-white drop-shadow-md" size={24} />
+                    <span className="sr-only">Update avatar</span>
+                  </div>
                 </div>
-              </div>
-              <input
-                type="file"
-                ref={fileInputRef}
-                className="hidden"
-                accept="image/*"
-                onChange={handleFileChange}
+                <input
+                  type="file"
+                  ref={fileInputRef}
+                  className="hidden"
+                  accept="image/*"
+                  onChange={handleFileChange}
+                />
+              </>
+            ) : (
+              <ProfileAvatar
+                profile={profile}
+                className="-mt-10 h-24 w-24 rounded-3xl border-4 border-white transition-opacity duration-200 ease-in-out group-hover:opacity-90"
               />
-            </>
-          ) : (
-            <ProfileAvatar
-              profile={profile}
-              className="-mt-10 h-24 w-24 rounded-3xl border-4 border-white transition-opacity duration-200 ease-in-out group-hover:opacity-90"
-            />
-          )}
-          <div>
-            <p className="font-mono font-medium uppercase text-sm">{t('social.profile')}</p>
-            <div className="flex items-center space-x-2">
-              <h2 className="text-2xl font-semibold">
-                {profile.displayName ? profile.displayName : `@${profile.username}`}
-              </h2>
-              {profile.id === user?.currentProfileId && <EditProfileDialog />}
-            </div>
-            {profile.displayName && (
-              <div className="flex items-center text-lg gap-x-2 text-neutral-600">
-                <span>@{profile.username}</span>
-              </div>
             )}
+            <div>
+              <p className="font-mono font-medium uppercase text-sm">{t('social.profile')}</p>
+              <div className="flex items-center space-x-4">
+                <h2 className="text-2xl font-semibold">
+                  {profile.displayName ? profile.displayName : `@${profile.username}`}
+                </h2>
+                <FollowButton profile={profile} isFollowing={isFollowing} />
+                {isOwnProfile && <EditProfileDialog />}
+              </div>
+              {profile.displayName && (
+                <div className="flex items-center text-lg gap-x-2 text-neutral-600">
+                  <span>@{profile.username}</span>
+                </div>
+              )}
+              <FollowCounts />
+            </div>
           </div>
         </div>
         <div className="mt-4 space-y-2 text-sm text-neutral-600 border-t pt-4">
@@ -138,7 +150,7 @@ export function ProfileHeader({ profile }: { profile: Profile }) {
           )}
           {profile.websiteUrl && (
             <div className="flex items-center gap-x-2">
-              <Link size={16} />
+              <LinkIcon size={16} />
               <a
                 href={profile.websiteUrl}
                 target="_blank"
@@ -152,5 +164,22 @@ export function ProfileHeader({ profile }: { profile: Profile }) {
         </div>
       </div>
     </header>
+  )
+}
+
+function FollowCounts() {
+  const { profile } = usePageProps<{ profile: Profile }>()
+  const t = useTranslate()
+
+  return (
+    <div className="flex items-center gap-x-2 mt-2">
+      <span className="flex items-center gap-x-1 text-neutral-600 text-sm">
+        {profile.followingCount} {t('social.following')}
+      </span>
+      <span className="text-neutral-600 text-sm">·</span>
+      <span className="flex items-center gap-x-1 text-neutral-600 text-sm">
+        {profile.followersCount} {t('social.followers', { count: profile.followersCount })}
+      </span>
+    </div>
   )
 }

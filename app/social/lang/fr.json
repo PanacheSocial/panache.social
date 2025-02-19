@@ -102,6 +102,14 @@
   "bio_placeholder": "Parlez-nous un peu de vous...",
   "website_placeholder": "https://www.votresite.fr",
   "current_profile": "Profil actif",
+
+  "following": "Abonnements",
+  "followers": "Abonnés",
+  "follow": "Suivre",
+  "unfollow": "Ne plus suivre",
+  "follow_success": "Vous suivez maintenant ce profil !",
+  "unfollow_success": "Vous ne suivez plus ce profil !",
+
   "empty_here": "C'est vide ici",
   "home_feed_no_posts_message": "Rejoignez plus de salons pour voir des posts dans votre fil."
 }

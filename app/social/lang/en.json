@@ -102,6 +102,13 @@
   "display_name_placeholder": "Enter your display name",
   "bio_placeholder": "Tell us a bit about yourself...",
   "website_placeholder": "https://www.yourwebsite.com",
+  
+  "following": "Following",
+  "followers": "Followers",
+  "follow": "Follow",
+  "unfollow": "Unfollow",
+  "follow_success": "You are now following this profile!",
+  "unfollow_success": "You are no longer following this profile!",
   "current_profile": "Current profile",
   "empty_here": "It's empty here",
   "home_feed_no_posts_message": "Join more rooms to see posts in your feed."

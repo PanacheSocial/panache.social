@@ -133,3 +133,11 @@ router
   .patch('/profiles/:profileId/avatar', [ProfilesController, 'updateAvatar'])
   .as('profiles.updateAvatar')
   .use(middleware.auth())
+router
+  .post('/profiles/:profileId/follow', [ProfilesController, 'follow'])
+  .as('profiles.follow')
+  .use(middleware.auth())
+router
+  .post('/profiles/:profileId/unfollow', [ProfilesController, 'unfollow'])
+  .as('profiles.unfollow')
+  .use(middleware.auth())
