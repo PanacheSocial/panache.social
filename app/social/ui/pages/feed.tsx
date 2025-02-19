@@ -1,23 +1,17 @@
 import React from 'react'
 import SocialLayout from '../components/social_layout'
-import Room from '#social/models/room'
-import Post from '#social/models/post'
-import { useFormatDistanceToNow } from '#common/ui/hooks/use_format_distance_to_now'
-import useTranslate from '#common/ui/hooks/use_translate'
 import { PostFeed } from '../components/feeds/feed'
 import { Feed } from '#social/types/feed'
 import { PageMeta } from '../components/page_meta'
-import usePageProps from '#common/ui/hooks/use_page_props'
-import { RoomCard } from '#social/ui/components/rooms/room_card'
-import { CircleOff, Compass, Squirrel, Telescope, TrendingUp } from 'lucide-react'
+import { Telescope, TrendingUp } from 'lucide-react'
 import { Link } from '@inertiajs/react'
 import { buttonVariants } from '#common/ui/components/button'
 import { cn } from '#common/ui/lib/utils'
 import { AsciiCyrano } from '../components/ascii_cyrano'
+import useTranslate from '#common/ui/hooks/use_translate'
 
 export default function Landing(feed: Feed) {
   const t = useTranslate()
-  const { popularRooms } = usePageProps<{ popularRooms: Room[] }>()
 
   return (
     <PageMeta
@@ -26,6 +20,7 @@ export default function Landing(feed: Feed) {
         'og:title': 'Panache Social',
       }}
     >
+      <h1 className="text-3xl font-bold pb-8">{t('social.feed')}</h1>
       <PostFeed {...feed} />
       {feed.posts.length === 0 && (
         <div className="md:flex items-center">

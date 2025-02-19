@@ -51,7 +51,7 @@ export default class RoomsController {
               .first()
             return !roomFoundByName
           }),
-        description: vine.string().minLength(10),
+        description: vine.string().minLength(10).maxLength(255),
       })
     )
 

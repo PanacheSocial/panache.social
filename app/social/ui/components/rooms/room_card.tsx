@@ -4,7 +4,6 @@ import Room from '#social/models/room'
 import { Link } from '@inertiajs/react'
 import { Users2Icon } from 'lucide-react'
 import useTranslate from '#common/ui/hooks/use_translate'
-import { Avatar, AvatarImage } from '#common/ui/components/avatar'
 import { useFormatDistanceToNow } from '#common/ui/hooks/use_format_distance_to_now'
 import { RoomLogo } from './room_logo'
 
@@ -23,10 +22,9 @@ export function RoomCard({ room }: RoomCardProps) {
           <div className="flex flex-wrap space-x-4">
             <RoomLogo room={room} className="h-12 w-12 rounded-lg border" />
 
-            <div className="flex flex-col">
-              {/* Content */}
+            <div className="flex flex-col flex-1">
               <h2 className="text-sm font-medium">{room.name}</h2>
-              <p className="text-[13px] truncate">{room.description}</p>
+              <p className="text-[13px] line-clamp-2">{room.description}</p>
               <div className="text-xs text-muted-foreground flex flex-wrap items-center gap-x-1 pt-1">
                 <Users2Icon className="h-3 w-3" />
                 <span>

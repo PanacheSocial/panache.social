@@ -16,9 +16,7 @@ export default function Landing(feed: Feed) {
         'og:description': 'An open-source everything app',
       }}
     >
-      <div>
-        <h1 className="text-3xl font-bold pb-8">{t('social.popular')}</h1>
-      </div>
+      <h1 className="text-3xl font-bold pb-8">{t('social.popular')}</h1>
       <PostFeed {...feed} />
     </PageMeta>
   )
