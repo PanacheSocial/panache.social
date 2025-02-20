@@ -27,7 +27,7 @@ export default function Show({
       meta={{
         'description': room.description,
         'og:description': room.description,
-        'og:url': `https://panache.so/rooms/${room.slug}`,
+        'og:url': `https://panache.social/rooms/${room.slug}`,
       }}
     >
       <RoomHeader room={room} canModerate={canModerate} />

@@ -32,7 +32,7 @@ export default function Show({ post }: { post: Post }) {
         'description': post.text || post.title,
         'og:description': post.text || undefined,
         'og:image': post.image || post.ogImage || undefined,
-        'og:url': `https://panache.so/posts/${post.id}`,
+        'og:url': `https://panache.social/posts/${post.id}`,
       }}
     >
       <div className="flex flex-col-reverse sm:grid sm:grid-cols-4 gap-y-4 sm:gap-y-0 sm:gap-x-8">

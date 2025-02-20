@@ -59,7 +59,7 @@ export function CommentActions({ post, comment, hideReply }: CommentActionsProps
   }
 
   const handleCopyLink = (e: FormEvent) => {
-    navigator.clipboard.writeText(`https://panache.so/posts/${post.id}#comment-${comment.id}`)
+    navigator.clipboard.writeText(`https://panache.social/posts/${post.id}#comment-${comment.id}`)
     toast({
       description: (
         <div className="flex items-center space-x-2">

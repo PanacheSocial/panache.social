@@ -31,11 +31,11 @@ export default function Landing(feed: Feed) {
             <div className="text-2xl font-semibold">{t('social.empty_here')}</div>
             <div>{t('social.home_feed_no_posts_message')}</div>
             <div className="flex  gap-4">
-              <Link href="/rooms" className={cn(buttonVariants({ variant: 'link' }))}>
+              <Link href="/rooms" className={cn(buttonVariants({ variant: 'secondary' }))}>
                 <Telescope />
                 {t('social.explore')}
               </Link>
-              <Link href="/popular" className={cn(buttonVariants({ variant: 'link' }))}>
+              <Link href="/popular" className={cn(buttonVariants({ variant: 'secondary' }))}>
                 <TrendingUp />
                 {t('social.popular')}
               </Link>
