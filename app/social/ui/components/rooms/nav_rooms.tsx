@@ -39,7 +39,11 @@ export function NavRooms({ rooms, title }: { rooms: Room[]; title: string }) {
   if (rooms.length > roomsList.length) {
     const newRooms = rooms.filter((room) => !roomsList.some((r) => r.slug === room.slug))
     setRoomsList([...roomsList, ...newRooms])
+  }else if (rooms.length < roomsList.length) {
+    const newRooms = roomsList.filter((room) => rooms.some((r) => r.slug === room.slug))
+    setRoomsList(newRooms)
   }
+
 
   React.useEffect(() => {
     if (typeof localStorage !== 'undefined') {
