@@ -28,5 +28,6 @@
   "change_password": "पासवर्ड परिवर्तन गर्नुहोस्",
   "invalid_credentials": "प्रयोगकर्ता नाम वा पासवर्ड गलत छ",
   "email_sent_title": "इमेल पठाइयो",
-  "email_sent_description": "तपाईंको इमेलमा पासवर्ड रिसेट लिङ्क पठाइएको छ।"
+  "email_sent_description": "तपाईंको इमेलमा पासवर्ड रिसेट लिङ्क पठाइएको छ।",
+  "confirmation_password_label": "पासवर्ड पुष्टि गर्नुहोस्"
 }

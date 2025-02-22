@@ -28,5 +28,6 @@
   "change_password": "Changer de mot de passe",
   "invalid_credentials": "Identifiants invalides",
   "email_sent_title": "Courriel envoyé",
-  "email_sent_description": "Un courriel de réinitialisation de mot de passe a été envoyé à l'adresse électronique associée à votre compte."
+  "email_sent_description": "Un courriel de réinitialisation de mot de passe a été envoyé à l'adresse électronique associée à votre compte.",
+  "confirmation_password_label": "Confirmer le mot de passe"
 }

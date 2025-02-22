@@ -28,5 +28,6 @@
   "change_password": "Change Password",
   "invalid_credentials": "Invalid credentials",
   "email_sent_title": "Email sent",
-  "email_sent_description": "A password reset email has been sent to the email address associated with your account."
+  "email_sent_description": "A password reset email has been sent to the email address associated with your account.",
+  "confirmation_password_label": "Confirm Password"
 }
