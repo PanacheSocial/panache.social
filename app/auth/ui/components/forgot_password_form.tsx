@@ -18,13 +18,16 @@ import { CircleCheckIcon } from 'lucide-react'
 export function ForgotPasswordForm({ className, ...props }: React.ComponentPropsWithoutRef<'div'>) {
   const t = useTranslate('auth')
   const [success, setSuccess] = React.useState(false)
-  const form = useForm({
+
+  const  { setData, post, processing, errors }  = useForm({
     email: '',
   })
+
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
-    form.post('/auth/forgot_password', {
+    post('/auth/forgot_password', {
       onSuccess: () => setSuccess(true),
+      onError: () => setSuccess(false),
     })
   }
 
@@ -58,10 +61,14 @@ export function ForgotPasswordForm({ className, ...props }: React.ComponentProps
                     placeholder={t('email_placeholder')}
                     required
                     className="pr-20"
+                    onChange={(e) => setData('email', e.target.value)}
                   />
+                  {errors.email && (
+                    <p className="text-red-500 text-sm">{errors.email}</p> // TODO: Add translation
+                  )}
                 </div>
-                <Button type="submit" className="!w-full">
-                  {t('send_reset_link')}
+                <Button type="submit" className="!w-full" disabled={processing}>
+                  {processing ? t('sending') : t('send_reset_link')}
                 </Button>
               </div>
             </form>
