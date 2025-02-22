@@ -1,4 +1,5 @@
 {
+  "explore": "Explorer",
   "room": "Salon",
   "rooms": "Salons",
   "select_a_room": "Sélectionner un salon",
@@ -65,7 +66,6 @@
   "update_avatar": "Mettre à jour l'avatar",
   "avatar_updated": "Avatar mis à jour !",
   "feed": "Fil",
-
   "template": "Modèle",
   "background_color": "Couleur de fond",
   "text_color": "Couleur de fond",
@@ -83,15 +83,12 @@
   "others": "Autres",
   "select_meme_template": "Sélectionner un modèle de mème",
   "search_memes": "Recherche des mèmes",
-
   "profile_created": "Profil créé !",
   "switch_profile": "Changer de profil",
   "create_new_profile": "Créer un profil",
   "update_logo": "Mettre à jour le logo",
   "logo_updated": "Logo mis à jour !",
-
   "moderators": "Modérateurs",
-
   "edit_profile": "Modifier le profil",
   "display_name": "Nom d'affichage",
   "bio": "Biographie",
@@ -104,5 +101,15 @@
   "display_name_placeholder": "Entrez votre nom d'affichage",
   "bio_placeholder": "Parlez-nous un peu de vous...",
   "website_placeholder": "https://www.votresite.fr",
-  "current_profile": "Profil actif"
+  "current_profile": "Profil actif",
+
+  "following": "Abonnements",
+  "followers": "Abonnés",
+  "follow": "Suivre",
+  "unfollow": "Ne plus suivre",
+  "follow_success": "Vous suivez maintenant ce profil !",
+  "unfollow_success": "Vous ne suivez plus ce profil !",
+
+  "empty_here": "C'est vide ici",
+  "home_feed_no_posts_message": "Rejoignez plus de salons pour voir des posts dans votre fil."
 }

@@ -8,15 +8,16 @@ import { ProfileHeader } from '../components/profiles/profile_header'
 import { CommentCard } from '../components/comments/comment_card'
 import Profile from '#social/models/profile'
 import { RoomLogo } from '../components/rooms/room_logo'
+import { PageMeta } from '../components/page_meta'
 
 export default function ProfileComments({ profile }: { profile: Profile }) {
   const t = useTranslate()
   const formatDistanceToNow = useFormatDistanceToNow()
 
   return (
-    <SocialLayout title={`${profile.username} - ${t('social.comments')}`}>
+    <PageMeta title={`${profile.username} - ${t('social.comments')}`}>
       <div className="space-y-8">
-        <ProfileHeader profile={profile} />
+        <ProfileHeader />
         <ProfileTabs resource="comments" />
         <div className="gap-y-4 flex flex-col max-w-4xl mx-auto">
           {profile.comments.map((comment) => (
@@ -66,6 +67,8 @@ export default function ProfileComments({ profile }: { profile: Profile }) {
           ))}
         </div>
       </div>
-    </SocialLayout>
+    </PageMeta>
   )
 }
+
+ProfileComments.layout = SocialLayout

@@ -7,17 +7,22 @@ import { Input } from '#common/ui/components/input'
 import { Button } from '#common/ui/components/button'
 import useTranslate from '#common/ui/hooks/use_translate'
 import useQuery from '#common/ui/hooks/use_query'
+import usePath from '#common/ui/hooks/use_path'
 
 interface SearchInputProps {
   className?: string
 }
 
+const explorePaths = ['/rooms', '/posts', '/comments']
+
 export function SearchInput({ className = '' }: SearchInputProps) {
+  const path = usePath()
+  const isExplore = explorePaths.includes(path)
   const t = useTranslate()
   const query = useQuery()
   const [searchTerm, setSearchTerm] = useState(query.search || '')
   return (
-    <form className={`relative ${className}`} action="/rooms" method="get">
+    <form className={`relative ${className}`} action={isExplore ? path : '/rooms'} method="get">
       <button type="submit" hidden></button>
       <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
       <Input

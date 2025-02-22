@@ -57,7 +57,7 @@ This license is approved by the [Free Software Foundation](https://www.gnu.org/l
 git clone https://github.com/PanacheCompany/panache
 
 # Change directory
-cd panache.so
+cd panache.social
 
 # Install dependencies
 npm install

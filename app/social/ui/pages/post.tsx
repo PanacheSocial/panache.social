@@ -16,6 +16,7 @@ import { LinkPreview } from '../components/posts/link_preview'
 import { ProfileAvatar } from '../components/profiles/profile_avatar'
 import { RoomLogo } from '../components/rooms/room_logo'
 import { YouTubeEmbed } from '../components/posts/youtube_embed'
+import { PageMeta } from '../components/page_meta'
 
 export default function Show({ post }: { post: Post }) {
   const t = useTranslate()
@@ -25,13 +26,13 @@ export default function Show({ post }: { post: Post }) {
   const isYouTubeLink = post.link?.match(/^(https?:\/\/)?(www\.)?(youtube\.com|youtu\.be)\/.+$/)
 
   return (
-    <SocialLayout
+    <PageMeta
       title={post.title}
       meta={{
         'description': post.text || post.title,
         'og:description': post.text || undefined,
         'og:image': post.image || post.ogImage || undefined,
-        'og:url': `https://panache.so/posts/${post.id}`,
+        'og:url': `https://panache.social/posts/${post.id}`,
       }}
     >
       <div className="flex flex-col-reverse sm:grid sm:grid-cols-4 gap-y-4 sm:gap-y-0 sm:gap-x-8">
@@ -190,6 +191,8 @@ export default function Show({ post }: { post: Post }) {
           </div>
         ) : null}
       </div>
-    </SocialLayout>
+    </PageMeta>
   )
 }
+
+Show.layout = SocialLayout

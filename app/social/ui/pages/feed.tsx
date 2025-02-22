@@ -1,74 +1,50 @@
 import React from 'react'
 import SocialLayout from '../components/social_layout'
-import { SortBySelect } from '../components/sort_by_select'
-import Room from '#social/models/room'
-import { PostCard } from '../components/posts/post_card'
-import Post from '#social/models/post'
+import { PostFeed } from '../components/feeds/feed'
+import { Feed } from '#social/types/feed'
+import { PageMeta } from '../components/page_meta'
+import { Telescope, TrendingUp } from 'lucide-react'
 import { Link } from '@inertiajs/react'
-import { useFormatDistanceToNow } from '#common/ui/hooks/use_format_distance_to_now'
+import { buttonVariants } from '#common/ui/components/button'
+import { cn } from '#common/ui/lib/utils'
+import { AsciiCyrano } from '../components/ascii_cyrano'
 import useTranslate from '#common/ui/hooks/use_translate'
-import { RoomLogo } from '../components/rooms/room_logo'
 
-export default function Landing({ posts }: { room: Room; posts: Post[] }) {
-  const formatDistanceToNow = useFormatDistanceToNow()
+export default function Landing(feed: Feed) {
   const t = useTranslate()
+
   return (
-    <SocialLayout
+    <PageMeta
       title={t('social.feed')}
       meta={{
         'og:title': 'Panache Social',
       }}
     >
-      <div className="grid lg:grid-cols-3">
-        <div className="col-span-2">
-          <SortBySelect />
-        </div>
-      </div>
-      <div className="pt-4 grid lg:grid-cols-3 gap-y-4">
-        {posts.map((post) => (
-          <div className="col-span-2" key={post.id}>
-            <PostCard
-              post={post}
-              room={post.room}
-              header={
-                <div className="flex items-center justify-between">
-                  <div className="flex items-center gap-2">
-                    <Link
-                      className="hover:opacity-75 transition-opacity"
-                      href={`/rooms/${post.room.slug}`}
-                    >
-                      <RoomLogo room={post.room} className="h-8 w-8" />
-                    </Link>
-
-                    <div className="flex flex-col">
-                      <div className="flex items-center gap-1 text-[13px]">
-                        <Link
-                          className="font-medium hover:text-emerald-600 transition-colors"
-                          href={`/rooms/${post.room.slug}`}
-                        >
-                          {post.room.name}
-                        </Link>
-                        <span className="text-muted-foreground">
-                          • {formatDistanceToNow(post.createdAt as unknown as string)}
-                        </span>
-                      </div>
-
-                      <div className="flex">
-                        <Link
-                          className="text-xs text-muted-foreground hover:text-emerald-800 transition-colors"
-                          href={`/profiles/${post.profile.username}`}
-                        >
-                          @{post.profile.username}
-                        </Link>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              }
-            />
+      <h1 className="text-3xl font-bold pb-8">{t('social.feed')}</h1>
+      <PostFeed {...feed} />
+      {feed.posts.length === 0 && (
+        <div className="md:flex items-center">
+          <div className="md:px-8 py-8">
+            <AsciiCyrano />
           </div>
-        ))}
-      </div>
-    </SocialLayout>
+          <div className="space-y-4">
+            <div className="text-2xl font-semibold">{t('social.empty_here')}</div>
+            <div>{t('social.home_feed_no_posts_message')}</div>
+            <div className="flex  gap-4">
+              <Link href="/rooms" className={cn(buttonVariants({ variant: 'secondary' }))}>
+                <Telescope />
+                {t('social.explore')}
+              </Link>
+              <Link href="/popular" className={cn(buttonVariants({ variant: 'secondary' }))}>
+                <TrendingUp />
+                {t('social.popular')}
+              </Link>
+            </div>
+          </div>
+        </div>
+      )}
+    </PageMeta>
   )
 }
+
+Landing.layout = SocialLayout

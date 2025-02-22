@@ -15,17 +15,17 @@ export default class RoomsController {
   async index({ inertia, request }: HttpContext) {
     const roomsQueryValidator = vine.compile(
       vine.object({
-        searchQuery: vine.string().optional(),
+        search: vine.string().optional(),
         page: vine.number().positive().withoutDecimals().min(1).optional(),
       })
     )
     const data = await request.validateUsing(roomsQueryValidator)
 
     const result = await Room.query()
-      .if(data.searchQuery, (query) => {
+      .if(data.search, (query) => {
         query.whereRaw(
           `unaccent(LOWER(name)) LIKE unaccent(?) OR unaccent(LOWER(description)) LIKE unaccent(?)`,
-          [`%${data.searchQuery?.toLowerCase()}%`, `%${data.searchQuery?.toLowerCase()}%`]
+          [`%${data.search?.toLowerCase()}%`, `%${data.search?.toLowerCase()}%`]
         )
       })
       .paginate(data.page || 1, 20)
@@ -51,7 +51,7 @@ export default class RoomsController {
               .first()
             return !roomFoundByName
           }),
-        description: vine.string().minLength(10),
+        description: vine.string().minLength(10).maxLength(255),
       })
     )
 
@@ -60,7 +60,7 @@ export default class RoomsController {
     const room = new Room()
     room.name = data.name
     room.description = data.description
-    room.lang = i18n?.locale
+    room.lang = i18n.locale
     await room.save()
 
     await room.related('members').create({

@@ -8,7 +8,16 @@ export default class ProfilesController {
   async posts({ auth, params, inertia, response }: HttpContext) {
     const profile = await Profile.query()
       .where('username', params.username)
-      .select('id', 'username', 'avatar', 'displayName', 'bio', 'websiteUrl')
+      .select(
+        'id',
+        'username',
+        'avatar',
+        'displayName',
+        'bio',
+        'websiteUrl',
+        'followers_count',
+        'following_count'
+      )
       .preload('posts', (query) => {
         query.orderBy('created_at', 'desc')
         query.preload('room')
@@ -27,13 +36,31 @@ export default class ProfilesController {
       return response.notFound('Profile not found.')
     }
 
-    return inertia.render('social/profile_posts', { profile })
+    const isFollowing = auth.isAuthenticated
+      ? await auth
+          .user!.currentProfile!.related('following')
+          .query()
+          .where('following_id', profile.id)
+          .first()
+          .then((follow) => !!follow)
+      : false
+
+    return inertia.render('social/profile_posts', { profile, isFollowing })
   }
 
   async comments({ auth, params, inertia, response }: HttpContext) {
     const profile = await Profile.query()
       .where('username', params.username)
-      .select('id', 'username', 'avatar', 'displayName', 'bio', 'websiteUrl')
+      .select(
+        'id',
+        'username',
+        'avatar',
+        'displayName',
+        'bio',
+        'websiteUrl',
+        'followers_count',
+        'following_count'
+      )
       .preload('comments', (query) => {
         query.preload('post', (q) => {
           q.preload('room')
@@ -54,7 +81,16 @@ export default class ProfilesController {
       return response.notFound('Profile not found.')
     }
 
-    return inertia.render('social/profile_comments', { profile })
+    const isFollowing = auth.isAuthenticated
+      ? await auth
+          .user!.currentProfile!.related('following')
+          .query()
+          .where('following_id', profile.id)
+          .first()
+          .then((follow) => !!follow)
+      : false
+
+    return inertia.render('social/profile_comments', { profile, isFollowing })
   }
 
   async updateUsername({ auth, params, request, response }: HttpContext) {
@@ -217,5 +253,45 @@ export default class ProfilesController {
     await profile.save()
 
     return response.redirect().toPath(`/profiles/${profile.username}`)
+  }
+
+  async follow({ auth, params, response }: HttpContext) {
+    const profileToFollow = await Profile.findByOrFail('id', params.profileId)
+
+    const existingFollow = await auth
+      .user!.currentProfile!.related('following')
+      .query()
+      .where('following_id', profileToFollow.id)
+      .first()
+
+    if (existingFollow) {
+      return response.badRequest('You are already following this profile')
+    }
+
+    if (auth.user!.currentProfileId === profileToFollow.id) {
+      return response.badRequest('You cannot follow yourself')
+    }
+
+    await auth.user!.currentProfile!.related('following').create({
+      followingId: profileToFollow.id,
+    })
+
+    return response.redirect().back()
+  }
+
+  async unfollow({ auth, params, response }: HttpContext) {
+    const follow = await auth
+      .user!.currentProfile!.related('following')
+      .query()
+      .where('following_id', params.profileId)
+      .first()
+
+    if (!follow) {
+      return response.badRequest('Vous ne suivez pas ce profil')
+    }
+
+    await follow.delete()
+
+    return response.redirect().back()
   }
 }

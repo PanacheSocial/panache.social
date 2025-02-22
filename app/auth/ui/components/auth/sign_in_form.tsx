@@ -36,7 +36,7 @@ export function SignInForm({ className, ...props }: React.ComponentPropsWithoutR
                     className="pr-20"
                   />
                   <span className="absolute right-3 top-1/2 -translate-y-1/2 text-sm text-muted-foreground">
-                    @panache.so
+                    @panache.social
                   </span>
                 </div>
               </div>

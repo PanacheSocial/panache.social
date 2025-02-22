@@ -59,6 +59,7 @@ export default defineConfig({
   |
   */
   preloads: [
+    () => import('#start/macros'),
     () => import('#start/routes'),
     () => import('#start/kernel'),
     () => import('#start/events'),

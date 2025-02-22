@@ -116,7 +116,7 @@ export function SignUpForm({ className, ...props }: React.ComponentPropsWithoutR
                     }
                   />
                   <span className="hidden sm:block absolute right-3 top-1/2 -translate-y-1/2 text-sm text-muted-foreground">
-                    @panache.so
+                    @panache.social
                   </span>
                 </div>
                 <Error errorKey="username" />

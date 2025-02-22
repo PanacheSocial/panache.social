@@ -28,7 +28,7 @@ export function PostActions({ post }: PostCardProps) {
   const params = useParams()
 
   const handleCopyLink = (e: FormEvent) => {
-    navigator.clipboard.writeText(`https://panache.so/posts/${post.id}`)
+    navigator.clipboard.writeText(`https://panache.social/posts/${post.id}`)
     toast({
       description: (
         <div className="flex items-center space-x-2">

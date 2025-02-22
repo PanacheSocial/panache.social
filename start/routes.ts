@@ -50,6 +50,7 @@ router.post('/rooms/:roomSlug/quit', [RoomsController, 'quit']).use(middleware.a
 
 const PostsController = () => import('#social/controllers/posts_controller')
 router.get('/', [PostsController, 'feed']).use(middleware.loadRooms())
+router.get('/popular', [PostsController, 'popular']).use(middleware.loadRooms())
 
 router.get('/posts', [PostsController, 'index']).use(middleware.loadRooms())
 router
@@ -131,4 +132,12 @@ router
 router
   .patch('/profiles/:profileId/avatar', [ProfilesController, 'updateAvatar'])
   .as('profiles.updateAvatar')
+  .use(middleware.auth())
+router
+  .post('/profiles/:profileId/follow', [ProfilesController, 'follow'])
+  .as('profiles.follow')
+  .use(middleware.auth())
+router
+  .post('/profiles/:profileId/unfollow', [ProfilesController, 'unfollow'])
+  .as('profiles.unfollow')
   .use(middleware.auth())
