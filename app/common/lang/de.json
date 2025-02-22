@@ -1,0 +1,21 @@
+{
+  "home": "Startseite",
+  "search": "Suche",
+  "join": "Beitreten",
+  "quit": "Verlassen",
+  "created": "Erstellt",
+  "cancel": "Abbrechen",
+  "submit": "Absenden",
+  "delete": "Löschen",
+  "description": "Beschreibung",
+  "gender": "Geschlecht",
+  "male": "Herr",
+  "female": "Frau",
+  "settings": "Einstellungen",
+  "soon": "Bald",
+  "social_description": "Beteilige dich an der Unterhaltung, teile deine Ideen.",
+  "emails_description": "Sende und empfange deine E-Mails.",
+  "ai_description": "Verbessere deine Texte, verfasse E-Mails, generiere Code, ...",
+  "view_all": "Alle anzeigen"
+}
+  
