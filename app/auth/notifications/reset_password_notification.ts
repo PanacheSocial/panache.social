@@ -6,7 +6,7 @@ import router from '@adonisjs/core/services/router'
 import { renderToString } from 'react-dom/server'
 
 export default class ResetPasswordNotification extends BaseMail {
-  from = `Panache <${env.get('MAIL_FROM_ADDRESS')}>`
+  from = `Panache <${env.get('EMAIL_FROM')}>`
   subject = `Reset your password for Panache`
 
   constructor(private user: User) {
