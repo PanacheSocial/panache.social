@@ -11,6 +11,7 @@ import {
   Text,
 } from '@react-email/components'
 import User from '#common/models/user'
+import React from 'react'
 
 interface ResetPasswordEmailProps {
   user: User
