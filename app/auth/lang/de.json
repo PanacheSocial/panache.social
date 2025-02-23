@@ -28,6 +28,6 @@
   "change_password": "Passwort ändern",
   "invalid_credentials": "Ungültige Anmeldedaten",
   "email_sent_title": "E-Mail gesendet",
-  "email_sent_description": "Eine E-Mail zum Zurücksetzen des Passworts wurde an die mit deinem Konto verknüpfte E-Mail-Adresse gesendet."
+  "email_sent_description": "Eine E-Mail zum Zurücksetzen des Passworts wurde an die mit deinem Konto verknüpfte E-Mail-Adresse gesendet.",
+  "confirmation_password_label": "Passwort bestätigen"
 }
-  

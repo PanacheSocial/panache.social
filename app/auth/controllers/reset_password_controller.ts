@@ -14,7 +14,13 @@ export default class ResetPasswordController {
     /**
      * Render the "Reset Password" page.
      */
-    return inertia.render('auth/reset_password')
+    const email = request.param('email')
+    const signature = request.input('signature')
+
+    return inertia.render('auth/reset_password', {
+      email,
+      signature,
+    })
   }
 
   async handle({ request, params, response }: HttpContext) {

@@ -15,7 +15,7 @@ router.get('/auth/sign_up', [SignUpController, 'show'])
 router.post('/auth/sign_up', [SignUpController, 'handle'])
 
 const SignInController = () => import('#auth/controllers/sign_in_controller')
-router.get('/auth/sign_in', [SignInController, 'show'])
+router.get('/auth/sign_in', [SignInController, 'show']).as('auth.sign_in.show')
 router.post('/auth/sign_in', [SignInController, 'handle'])
 
 const SignOutController = () => import('#auth/controllers/sign_out_controller')

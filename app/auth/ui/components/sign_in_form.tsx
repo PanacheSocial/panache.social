@@ -80,7 +80,7 @@ export function SignInForm({ className, ...props }: React.ComponentPropsWithoutR
 
           {/* Password Field */}
           <div className="grid gap-2">
-            {/* <div className="flex items-center">
+            <div className="flex items-center">
               <Label htmlFor="password">{t('password_label')}</Label>
               <Link
                 href="/auth/forgot_password"
@@ -88,7 +88,7 @@ export function SignInForm({ className, ...props }: React.ComponentPropsWithoutR
               >
                 {t('forgot_password')}
               </Link>
-            </div> */}
+            </div>
             <Input
               id="password"
               type="password"
