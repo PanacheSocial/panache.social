@@ -10,6 +10,8 @@ services:
       - panache_postgres_data:/var/lib/postgresql/data
     ports:
       - 5432:5432
+    networks:
+      - panache_network
 
   minio:
     container_name: panache_minio
@@ -24,6 +26,8 @@ services:
     ports:
       - 8900:8900
       - 9000:9000
+    networks:
+      - panache_network
 
   mailhog:
     image: mailhog/mailhog
@@ -31,7 +35,13 @@ services:
     ports:
       - "8025:8025"
       - "1025:1025"
+    networks:
+      - panache_network
 
 volumes:
   panache_postgres_data:
   panache_minio_data:
+
+networks:
+  panache_network:
+    driver: bridge
