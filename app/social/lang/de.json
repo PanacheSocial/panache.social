@@ -1,4 +1,7 @@
 {
+  "explore": "Entdecken",
+  "empty_here": "Hier sieht es leider noch leer aus :(",
+  "home_feed_no_posts_message": "Tritt mehr Räumen bei, um Beiträge in deinem Feed zu sehen.",
   "room": "Raum",
   "rooms": "Räume",
   "select_a_room": "Wähle einen Raum",
