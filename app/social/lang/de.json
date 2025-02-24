@@ -104,5 +104,11 @@
   "display_name_placeholder": "Gib deinen Anzeigenamen ein",
   "bio_placeholder": "Erzähle uns ein wenig über dich...",
   "website_placeholder": "https://www.deinewebseite.de",
-  "current_profile": "Aktuelles Profil"
+  "current_profile": "Aktuelles Profil",
+  "following": "Folgt",
+  "followers": "Follower",
+  "follow": "Folgen",
+  "unfollow": "Entfolgen",
+  "follow_success": "Du folgst diesem Profil jetzt!",
+  "unfollow_success": "Du folgst diesem Profil nicht mehr!"
 }
