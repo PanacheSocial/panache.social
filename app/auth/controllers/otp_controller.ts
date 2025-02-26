@@ -5,7 +5,6 @@ import type { HttpContext } from '@adonisjs/core/http'
 import OTPNotification from '#auth/notifications/otp_notification'
 import { generateOtp } from '#auth/utils/otp'
 import mail from '@adonisjs/mail/services/main'
-import limiter from '@adonisjs/limiter/services/main'
 
 export default class OtpController {
   async show({ inertia, session, response }: HttpContext) {
@@ -28,15 +27,7 @@ export default class OtpController {
         return response.redirect().back()
       }
 
-      const attempts = limiter
-        .allowRequests(5)
-        .every(60)
-        .usingKey('otp:' + user.email)
-
-      if (!attempts) {
-        session.flash('errors.auth', i18n.t('auth.too_many_requests'))
-        return response.redirect().back()
-      }
+      // TODO: Implement rate limiting for OTP verification
 
       const verificationCode = request.input('verification_code')
       if (!verificationCode || user.verification_code !== verificationCode) {
@@ -76,11 +67,7 @@ export default class OtpController {
         return response.redirect().toRoute('auth.sign_up.show')
       }
 
-      const attempts = limiter.allowRequests(5).every(60).usingKey(user.email)
-      if (!attempts) {
-        session.flash('errors.auth', i18n.t('auth.too_many_requests'))
-        return response.redirect().back()
-      }
+      // TODO: Implement rate limiting for OTP resend
 
       const verificationCode = generateOtp()
       const verificationCodeExpiresAt = new Date(Date.now() + 1000 * 60 * 5)
