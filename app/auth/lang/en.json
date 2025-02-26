@@ -29,5 +29,14 @@
   "invalid_credentials": "Invalid credentials",
   "email_sent_title": "Email sent",
   "email_sent_description": "A password reset email has been sent to the email address associated with your account.",
-  "confirmation_password_label": "Confirm Password"
+  "confirmation_password_label": "Confirm Password",
+  "otp_title": "Enter the code",
+  "otp_description": "Enter the code sent to your email address.",
+  "email_not_verified": "Email not verified",
+  "invalid_otp": "Invalid code",
+  "too_many_requests": "You have reached the limit of code resend requests. Please try again later.",
+  "resend_otp": "Resend code",
+  "otp_sent": "Code sent",
+  "otp_not_sent": "Code not sent",
+  "submit": "Submit"
 }
