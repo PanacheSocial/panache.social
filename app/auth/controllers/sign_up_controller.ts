@@ -1,8 +1,10 @@
 import User from '#common/models/user'
-import WebhooksService from '#common/services/webhooks_service'
 import { inject } from '@adonisjs/core'
 import type { HttpContext } from '@adonisjs/core/http'
 import vine from '@vinejs/vine'
+import mail from '@adonisjs/mail/services/main'
+import OTPNotification from '#auth/notifications/otp_notification'
+import { generateOtp } from '#auth/utils/otp'
 
 export default class SignUpController {
   async show({ inertia }: HttpContext) {
@@ -10,10 +12,7 @@ export default class SignUpController {
   }
 
   @inject()
-  async handle(
-    { auth, request, response, i18n, session }: HttpContext,
-    webhooksService: WebhooksService
-  ) {
+  async handle({ request, response, i18n, session }: HttpContext) {
     const signUpValidator = vine.compile(
       vine.object({
         gender: vine.enum(['male', 'female']),
@@ -48,21 +47,31 @@ export default class SignUpController {
 
     const userAlreadyExists = await User.findBy('username', payload.username)
     if (userAlreadyExists !== null) {
-      session.flash('errors.email', 'Email already exists')
+      session.flash('errors.email', i18n.t('auth.username_already_exists'))
       return response.redirect().back()
     }
 
-    const user = await User.create({ ...payload, locale: i18n?.locale })
+    const verification_code = generateOtp()
+    const verification_code_expires_at = new Date(Date.now() + 1000 * 60 * 5) // 5 minutes
+
+    const user = await User.create({
+      ...payload,
+      locale: i18n?.locale,
+      verification_code,
+      verification_code_expires_at,
+    })
+
     await user.save()
 
     const profile = await user.related('profiles').create({ username: user.username })
     user.currentProfileId = profile.id
     await user.save()
 
-    await auth.use('web').login(user)
+    session.put('isNewUser', true)
+    session.put('userEmail', user.email)
 
-    await webhooksService.send(`[+] [User ${auth.user!.id} signed up]`)
+    await mail.sendLater(new OTPNotification(user))
 
-    return response.redirect('/')
+    return response.redirect().toRoute('auth.otp.show')
   }
 }
