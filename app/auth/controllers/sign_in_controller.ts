@@ -14,6 +14,14 @@ export default class SignInController {
 
     try {
       const user = await User.verifyCredentials(email || username, password)
+
+      if (!user.email_verified) {
+        session.flash('errors.auth', i18n.t('auth.email_not_verified'))
+        session.put('isNewUser', true)
+        session.put('userEmail', user.email)
+        return response.redirect().toRoute('auth.otp.show')
+      }
+
       await auth.use('web').login(user)
 
       if (nextPath) {

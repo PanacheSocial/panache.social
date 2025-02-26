@@ -39,6 +39,18 @@ export default class User extends compose(BaseModel, AuthFinder) {
   @column({ serializeAs: null })
   declare password: string
 
+  @column()
+  declare email_verified: boolean
+
+  @column()
+  declare email_verified_at: Date | null
+
+  @column()
+  declare verification_code: string | null
+
+  @column()
+  declare verification_code_expires_at: Date | null
+
   /**
    * Relationships.
    */
