@@ -37,6 +37,11 @@ router
   .post('/auth/reset_password/:email', [ResetPasswordController, 'handle'])
   .as('auth.reset_password.handle')
 
+const OtpController = () => import('#auth/controllers/otp_controller')
+router.get('/auth/otp', [OtpController, 'show']).as('auth.otp.show')
+router.post('/auth/otp', [OtpController, 'handle']).as('auth.otp.handle')
+router.post('/auth/resend-otp', [OtpController, 'resend']).as('auth.resend_otp')
+
 const RoomsController = () => import('#social/controllers/rooms_controller')
 
 router.get('/rooms', [RoomsController, 'index']).use(middleware.loadRooms())
