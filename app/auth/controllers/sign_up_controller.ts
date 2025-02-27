@@ -5,6 +5,7 @@ import vine from '@vinejs/vine'
 import mail from '@adonisjs/mail/services/main'
 import OTPNotification from '#auth/notifications/otp_notification'
 import { generateOtp } from '#auth/utils/otp'
+import redis from '@adonisjs/redis/services/main'
 
 export default class SignUpController {
   async show({ inertia }: HttpContext) {
@@ -54,13 +55,21 @@ export default class SignUpController {
     const verification_code = generateOtp()
     const verification_code_expires_at = new Date(Date.now() + 1000 * 60 * 5) // 5 minutes
 
+    // save verification code in Redis
+    await redis.set(
+      `otp:emailverification:${payload.email}`,
+      JSON.stringify({
+        code: verification_code,
+        expiresAt: verification_code_expires_at,
+      }),
+      'EX',
+      60 * 5 + 180 // 5 minutes + 3 minutes
+    )
+
     const user = await User.create({
       ...payload,
       locale: i18n?.locale,
-      verification_code,
-      verification_code_expires_at,
     })
-
     await user.save()
 
     const profile = await user.related('profiles').create({ username: user.username })
