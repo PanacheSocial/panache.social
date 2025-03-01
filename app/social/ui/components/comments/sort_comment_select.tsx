@@ -1,5 +1,5 @@
 import * as React from 'react'
-
+import { router } from '@inertiajs/react'
 import {
   Select,
   SelectContent,
@@ -12,22 +12,22 @@ import {
 import useTranslate from '#common/ui/hooks/use_translate'
 import { ArrowDownWideNarrowIcon } from 'lucide-react'
 import useQuery from '#common/ui/hooks/use_query'
+import usePath from '#common/ui/hooks/use_path'
 
 export function SortCommentSelect() {
   const t = useTranslate('social')
   const query = useQuery()
+  const path = usePath()
   const [method, setMethod] = React.useState(query.method || 'popular')
 
-  const [loaded, setLoaded] = React.useState(false)
-
   React.useEffect(() => {
-    setLoaded(true)
-  }, [])
+    const params = new URLSearchParams(query)
+    params.set('method', method)
 
-  React.useEffect(() => {
-    if (!loaded) return
-
-    window.location.search = `method=${method}`
+    router.get(path, Object.fromEntries(params), {
+      preserveState: false,
+      preserveScroll: true,
+    })
   }, [method])
 
   return (

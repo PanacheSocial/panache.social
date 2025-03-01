@@ -1,5 +1,5 @@
 import * as React from 'react'
-
+import { router } from '@inertiajs/react'
 import {
   Select,
   SelectContent,
@@ -12,27 +12,30 @@ import {
 import useTranslate from '#common/ui/hooks/use_translate'
 import { ArrowDownWideNarrowIcon, ClockIcon } from 'lucide-react'
 import useQuery from '#common/ui/hooks/use_query'
+import usePath from '#common/ui/hooks/use_path'
 
 export function SortBySelect() {
   const t = useTranslate('social')
   const query = useQuery()
+  const path = usePath()
   const [method, setMethod] = React.useState(query.method || 'popular')
   const [period, setPeriod] = React.useState(query.period || 'day')
 
-  const [loaded, setLoaded] = React.useState(false)
-
   React.useEffect(() => {
-    setLoaded(true)
-  }, [])
-
-  React.useEffect(() => {
-    if (!loaded) return
+    const params = new URLSearchParams(query)
 
     if (method === 'new') {
-      window.location.search = `method=new`
+      params.set('method', 'new')
+      params.delete('period')
     } else {
-      window.location.search = `method=${method}&period=${period}`
+      params.set('method', method)
+      params.set('period', period)
     }
+
+    router.get(path, Object.fromEntries(params), {
+      preserveState: false,
+      preserveScroll: true,
+    })
   }, [method, period])
 
   return (
