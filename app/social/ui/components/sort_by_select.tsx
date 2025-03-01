@@ -21,7 +21,15 @@ export function SortBySelect() {
   const [method, setMethod] = React.useState(query.method || 'popular')
   const [period, setPeriod] = React.useState(query.period || 'day')
 
+  const [loaded, setLoaded] = React.useState(false)
+
   React.useEffect(() => {
+    setLoaded(true)
+  }, [])
+
+  React.useEffect(() => {
+    if (!loaded) return
+    
     const params = new URLSearchParams(query)
 
     if (method === 'new') {

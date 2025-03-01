@@ -20,7 +20,15 @@ export function SortCommentSelect() {
   const path = usePath()
   const [method, setMethod] = React.useState(query.method || 'popular')
 
+  const [loaded, setLoaded] = React.useState(false)
+
   React.useEffect(() => {
+    setLoaded(true)
+  }, [])
+
+  React.useEffect(() => {
+    if (!loaded) return
+
     const params = new URLSearchParams(query)
     params.set('method', method)
 
