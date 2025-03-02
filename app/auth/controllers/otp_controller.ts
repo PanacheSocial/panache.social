@@ -14,7 +14,10 @@ export default class OtpController {
     }
 
     // Send OTP when user lands on the page (since we expect them to verify)
-    await this.sendOtp(session)
+    if (session.get('resendVerificationEmail', false)) {
+      await this.sendOtp(session)
+      session.forget('resendVerificationEmail')
+    }
 
     return inertia.render('auth/otp')
   }
@@ -92,7 +95,7 @@ export default class OtpController {
       const user = await this.getUser(session)
       if (!user) return response.redirect().toRoute('auth.sign_up.show')
 
-      await this.sendOtp(session)
+      session.put('resendVerificationEmail', true)
       session.flash('success.auth', i18n.t('auth.otp_sent'))
 
       return response.redirect().back()
