@@ -5,6 +5,7 @@ import type { HttpContext } from '@adonisjs/core/http'
 import OTPNotification from '#auth/notifications/otp_notification'
 import { generateOtp } from '#auth/utils/otp'
 import mail from '@adonisjs/mail/services/main'
+import redis from '@adonisjs/redis/services/main'
 
 export default class OtpController {
   async show({ inertia, session, response }: HttpContext) {
@@ -12,7 +13,37 @@ export default class OtpController {
       return response.redirect().toRoute('auth.sign_up.show')
     }
 
+    // Send OTP when user lands on the page (since we expect them to verify)
+    if (session.get('resendVerificationEmail', false)) {
+      await this.sendOtp(session)
+      session.forget('resendVerificationEmail')
+    }
+
     return inertia.render('auth/otp')
+  }
+
+  // Helper function to fetch user
+  private async getUser(session: HttpContext['session']) {
+    return User.findBy('email', session.get('userEmail'))
+  }
+
+  // Helper function to send OTP and store in Redis
+  private async sendOtp(session: HttpContext['session']) {
+    const user = await this.getUser(session)
+    if (!user) return
+
+    const verificationCode = generateOtp()
+    const actualExpiry = new Date(Date.now() + 1000 * 60 * 5) // 5 minutes
+    const bufferExpiry = new Date(actualExpiry.getTime() + 1000 * 60 * 2) // Extra 2 minutes buffer
+
+    await redis.set(
+      `otp:emailverification:${session.get('userEmail')}`,
+      JSON.stringify({ code: verificationCode, expiresAt: actualExpiry }),
+      'EX',
+      Math.floor((bufferExpiry.getTime() - Date.now()) / 1000) // Store for 7 minutes
+    )
+
+    await mail.send(new OTPNotification(user))
   }
 
   @inject()
@@ -21,70 +52,65 @@ export default class OtpController {
     webhooksService: WebhooksService
   ) {
     try {
-      const user = await User.findBy('email', session.get('userEmail'))
+      const user = await this.getUser(session)
+      if (!user) return response.redirect().back()
 
-      if (!user) {
-        return response.redirect().back()
+      // Check OTP in Redis
+      const redisData = await redis.get(`otp:emailverification:${session.get('userEmail')}`)
+      if (!redisData) return this.flashAndRedirect(session, response, i18n.t('auth.invalid_otp'))
+
+      const { code, expiresAt } = JSON.parse(redisData)
+      const expiresAtDate = new Date(expiresAt)
+
+      if (code !== request.input('verification_code')) {
+        return this.flashAndRedirect(session, response, i18n.t('auth.invalid_otp'))
       }
 
-      // TODO: Implement rate limiting for OTP verification
-
-      const verificationCode = request.input('verification_code')
-      if (!verificationCode || user.verification_code !== verificationCode) {
-        session.flash('errors.auth', i18n.t('auth.invalid_otp'))
-        return response.redirect().back()
+      if (expiresAtDate < new Date()) {
+        return this.flashAndRedirect(session, response, i18n.t('auth.otp_expired')) // Show "OTP Expired"
       }
 
-      user.merge({
-        email_verified_at: new Date(),
-        verification_code: null,
-        verification_code_expires_at: null,
-        email_verified: true,
-      })
+      // Remove OTP after successful verification
+      await redis.del(`otp:emailverification:${session.get('userEmail')}`)
+
+      // Mark email as verified
+      user.merge({ email_verified_at: new Date(), email_verified: true })
+      await user.save()
 
       session.forget('userEmail')
       session.forget('isNewUser')
 
-      await user.save()
       await auth.use('web').login(user)
-      if (auth.user) {
-        await webhooksService.send(`[+] [User ${auth.user.id} signed up]`)
-      }
+      await webhooksService.send(`[+] [User ${user.id} signed up]`)
 
       return response.redirect('/')
-    } catch (error) {
-      session.flash('errors.auth', i18n.t('auth.invalid_otp'))
-      return response.redirect().back()
+    } catch {
+      return this.flashAndRedirect(session, response, i18n.t('auth.invalid_otp'))
     }
   }
 
   @inject()
   async resend({ response, session, i18n }: HttpContext) {
     try {
-      const user = await User.findBy('email', session.get('userEmail'))
+      const user = await this.getUser(session)
+      if (!user) return response.redirect().toRoute('auth.sign_up.show')
 
-      if (!user) {
-        return response.redirect().toRoute('auth.sign_up.show')
-      }
-
-      // TODO: Implement rate limiting for OTP resend
-
-      const verificationCode = generateOtp()
-      const verificationCodeExpiresAt = new Date(Date.now() + 1000 * 60 * 5)
-
-      user.merge({
-        verification_code: verificationCode,
-        verification_code_expires_at: verificationCodeExpiresAt,
-      })
-      await user.save()
-
+      session.put('resendVerificationEmail', true)
       session.flash('success.auth', i18n.t('auth.otp_sent'))
-      await mail.send(new OTPNotification(user))
 
       return response.redirect().back()
-    } catch (error) {
-      session.flash('errors.auth', i18n.t('auth.otp_not_sent'))
-      return response.redirect().back()
+    } catch {
+      return this.flashAndRedirect(session, response, i18n.t('auth.otp_not_sent'))
     }
+  }
+
+  // Helper function for error handling
+  private flashAndRedirect(
+    session: HttpContext['session'],
+    response: HttpContext['response'],
+    message: string
+  ) {
+    session.flash('errors.auth', message)
+    return response.redirect().back()
   }
 }

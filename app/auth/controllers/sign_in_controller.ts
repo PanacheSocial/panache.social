@@ -19,6 +19,7 @@ export default class SignInController {
         session.flash('errors.auth', i18n.t('auth.email_not_verified'))
         session.put('isNewUser', true)
         session.put('userEmail', user.email)
+        session.put('resendVerificationEmail', true)
         return response.redirect().toRoute('auth.otp.show')
       }
 

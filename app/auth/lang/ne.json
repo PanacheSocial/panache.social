@@ -29,5 +29,15 @@
   "invalid_credentials": "प्रयोगकर्ता नाम वा पासवर्ड गलत छ",
   "email_sent_title": "इमेल पठाइयो",
   "email_sent_description": "तपाईंको इमेलमा पासवर्ड रिसेट लिङ्क पठाइएको छ।",
-  "confirmation_password_label": "पासवर्ड पुष्टि गर्नुहोस्"
+  "confirmation_password_label": "पासवर्ड पुष्टि गर्नुहोस्",
+  "otp_title": "कोड लेख्नुहोस्",
+  "otp_description": "तपाईंको इमेलमा पठाइएको कोड लेख्नुहोस्।",
+  "email_not_verified": "इमेल प्रमाणित भएको छैन",
+  "invalid_otp": "कोड गलत छ",
+  "too_many_requests": "तपाईंले कोड पुन: पठाउने अनुरोधहरूको सीमा पार गर्नुभयो। कृपया केही समय पछाडि प्रयास गर्नुहोस्।",
+  "resend_otp": "कोड पुनः पठाउनुहोस्",
+  "otp_sent": "कोड पठाइयो",
+  "otp_not_sent": "कोड पठाइएन",
+  "otp_expired": "कोडको समय समाप्त भएको छ",
+  "submit": "पेश गर्नुहोस्"
 }

@@ -38,5 +38,6 @@
   "resend_otp": "Resend code",
   "otp_sent": "Code sent",
   "otp_not_sent": "Code not sent",
+  "otp_expired": "Code expired",
   "submit": "Submit"
 }

@@ -11,7 +11,7 @@ import router from '@adonisjs/core/services/router'
 import { middleware } from './kernel.js'
 
 const SignUpController = () => import('#auth/controllers/sign_up_controller')
-router.get('/auth/sign_up', [SignUpController, 'show'])
+router.get('/auth/sign_up', [SignUpController, 'show']).as('auth.sign_up.show')
 router.post('/auth/sign_up', [SignUpController, 'handle'])
 
 const SignInController = () => import('#auth/controllers/sign_in_controller')

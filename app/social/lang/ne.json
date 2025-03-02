@@ -106,5 +106,14 @@
   "bio_placeholder": "आफ्नो बारेमा थोरै लेख्नुहोस्...",
   "website_placeholder": "https://www.yourwebsite.com",
 
-  "current_profile": "वर्तमान प्रोफाइल"
+  "current_profile": "वर्तमान प्रोफाइल",
+
+  "following": "फलोइङ",
+  "followers": "फलोअरहरू",
+  "follow": "फलो गर्नुहोस्",
+  "unfollow": "फलो हटाउनुहोस्",
+  "follow_success": "तपाईंले यो प्रोफाइललाई फलो गर्नुभयो!",
+  "unfollow_success": "तपाईंले यो प्रोफाइलको फलो हट्नुभयो!",
+  "empty_here": "यहाँ खाली छ",
+  "home_feed_no_posts_message": "आफ्नो फिडमा पोस्टहरू हेर्न थप रूमहरूमा सामेल हुनुहोस्।"
 }
